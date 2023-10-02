@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
+import AuthContext from "../../state/Auth_context";
 
 const emailReducer = (state, action) => {
   if (action.type === "USER_INPUT") {
@@ -32,15 +33,16 @@ const collegeNameReducer = (state, action) => {
   return { value: "", isValid: false };
 };
 
-const Login = (props) => {
+const Login = () => {
   // const [enteredEmail, setEnteredEmail] = useState("");
   // const [emailIsValid, setEmailIsValid] = useState();
   // const [enteredPassword, setEnteredPassword] = useState("");
   // const [passwordIsValid, setPasswordIsValid] = useState();
-  const [enteredCollegeName, setEnteredCollegeName] = useState("");
-  const [collegeNameIsValid, setCollegeNameIsValid] = useState();
+  // const [enteredCollegeName, setEnteredCollegeName] = useState("");
+  // const [collegeNameIsValid, setCollegeNameIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+  const ctx = useContext(AuthContext);
   // useEffect(() => {
   //   const userValidateChecker = setTimeout(() => {
   //     setFormIsValid(
@@ -113,7 +115,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value,collegeState.value);
+    ctx.onLogin(emailState.value, passwordState.value,collegeState.value);
   };
 
   return (
