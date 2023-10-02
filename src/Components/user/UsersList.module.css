@@ -1,0 +1,49 @@
+.users {
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 40rem;
+}
+
+.users ul {
+  list-style: none;
+  padding: 1rem;
+}
+
+.users li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  position: relative;
+}
+.users li:hover{
+  background-color: gray;
+  color: azure;
+}
+.btn {
+  font: inherit;
+  border: 1px solid #4f005f;
+  background: #f14a4a;
+  color: white;
+  padding: 0.25rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn:hover,
+.btn:active {
+  background: #d31a30;
+  border-color: #741188;
+}
+
+.btn:focus {
+  outline: none;
+}
+.users h5{
+  padding-top: 15px;
+  padding-left: 20px;
+  margin-bottom: -30px;
+}
