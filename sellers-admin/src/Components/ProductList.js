@@ -13,8 +13,8 @@ const ProductList = (props) => {
           return (
             <li key={item.id}>
               {props.total(total)}
-              {item.name}--{item.price}
-              {"   "}
+              {item.name}{"  "}{item.price}
+              {"  "}{item.category}
               <button onClick={() => props.delete(item.id, total)}>
                 Delete
               </button>

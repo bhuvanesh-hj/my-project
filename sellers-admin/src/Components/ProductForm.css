@@ -92,10 +92,29 @@ h4{
     /* align-items:flex-start; */
     justify-content: space-between;
     margin: 10px 250px;
+    position: relative;
 }
 .second{
     margin-right: 25px;
 }
 .first{
     margin-left: 25px;
+}
+.select{
+    width: 300px;
+    height: 25px;
+    margin-bottom: 15px;
+}
+
+h5{
+    background-color: aliceblue;
+    /* padding: auto; */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: medium;
+    margin: 2px 0px;
+    text-align: center;
 }
