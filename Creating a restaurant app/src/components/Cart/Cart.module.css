@@ -27,6 +27,8 @@
   padding: 0.5rem 2rem;
   border-radius: 25px;
   margin-left: 1rem;
+  border-bottom: 3px solid;
+  border-right: 3px solid;
 }
 
 .actions button:hover,
@@ -41,6 +43,6 @@
 }
 
 .actions .button {
-  background-color: #8a2b06;
-  color: white;
+  /* background-color: #8a2b06; */
+  color: rgb(154, 19, 19);
 }

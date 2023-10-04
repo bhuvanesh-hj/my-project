@@ -13,9 +13,13 @@
   top: 20vh;
   left: 5%;
   width: 90%;
+  /* color: aliceblue; */
   background-color: white;
   padding: 1rem;
   border-radius: 14px;
+  background-image: url(https://previews.123rf.com/images/kilroy79/kilroy791610/kilroy79161000008/63530577-natural-organic-food-with-cutlery-silhouette-and-color-overlay-leaves-vegan-food-concept-farm-fresh.jpg);
+  background-size: cover;
+  background-position: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   z-index: 30;
   animation: slide-down 1s ease-out forwards;
