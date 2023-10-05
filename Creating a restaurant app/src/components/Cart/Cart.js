@@ -4,9 +4,11 @@ import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
 import cartContext from "../../store/cartContext";
 const Cart = (props) => {
-  //Importing the cartContex using the cart
+
+  //Importing the cartContex using the useContext hook
   const cartctx = useContext(cartContext);
 
+  // Adding some functionality to the order button if the cart is empty the should be disabled & if the the cart has some items the order button should be enabled
   const hasItems = cartctx.items.length >= 1;
 
   const addItemHandler = (item) => {
@@ -19,6 +21,7 @@ const Cart = (props) => {
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {cartctx.items.map((item) => (
+        //Creating the custom component for the cartitem 
         <CartItem
           item={item}
           key={item.id}
