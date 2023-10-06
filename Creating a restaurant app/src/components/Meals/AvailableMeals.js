@@ -6,26 +6,26 @@ import Card from "../UI/Card";
 const DUMMY_MEALS = [
   {
     id: "m1",
-    name: "Sushi",
-    description: "Finest fish and veggies",
+    name: "Idlis and Sambar",
+    description: "Best south indian meal",
     price: 499,
   },
   {
     id: "m2",
-    name: "Schnitzel",
-    description: "A german specialty!",
+    name: "Masala dosa",
+    description: "Famous in mysore",
     price: 199,
   },
   {
     id: "m3",
-    name: "Barbecue Burger",
-    description: "American, raw, meaty",
+    name: "Poori sagu",
+    description: "Bangaluru famous",
     price: 250,
   },
   {
     id: "m4",
-    name: "Green Bowl",
-    description: "Healthy...and green...",
+    name: "Benne (Butter) Masala Dosa",
+    description: "Davangere special",
     price: 150,
   },
 ];
