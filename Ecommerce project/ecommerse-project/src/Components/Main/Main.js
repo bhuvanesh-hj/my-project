@@ -17,7 +17,7 @@ const Main = () => {
         marginTop:30
       }}
     >
-      The Generics
+      The Colors
     </div>
   );
 };

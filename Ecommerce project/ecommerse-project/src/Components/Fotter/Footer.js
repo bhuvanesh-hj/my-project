@@ -29,7 +29,7 @@ const Footer = () => {
           alignItems: "flex-start",
         }}
       >
-        <h5 className="text-uppercase font-serif">The Generics</h5>
+        <h5 className="text-uppercase font-serif">The Colors</h5>
       </div>
     </footer>
   );

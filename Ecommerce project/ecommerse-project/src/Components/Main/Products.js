@@ -67,7 +67,8 @@ const Products = () => {
     >
       {productsArr.map((product) => {
         return (
-          <ProductCard
+          <ProductCard key={product.title}
+          item={product}
             title={product.title}
             price={product.price}
             image={product.imageUrl}
