@@ -2,8 +2,11 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
+import { useContext } from "react";
+import CartMainContext from "../Store/CartMainContext";
 
 const ContainerOutsideExample = (props) => {
+  const ctxNav=useContext(CartMainContext)
   return (
     <Navbar
       bg="dark"
@@ -25,7 +28,7 @@ const ContainerOutsideExample = (props) => {
         className="me-3"
         onClick={() => props.show(true)}
       >
-        Cart{"   "} <span>{0}</span>
+        Cart{"   "} <span>{ctxNav.cartList.length}</span>
       </Button>
     </Navbar>
   );

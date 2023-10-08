@@ -1,27 +1,40 @@
 import React, { useState } from "react";
-import CartContext from "./CartContext";
+import CartMainContext from "./CartMainContext";
 
 const CartContextProvider = (props) => {
-    const [cartItems, setCartItems] = useState([])
+  const [cartItemsList, setCartItemsList] = useState([]);
 
-        const addCartItemsHandler=(item)=>{
-            console.log(item)
-                setCartItems([...cartItems,item])
-        }
+  const addItemsToCart = (item) => {
+    const existItemIndex = cartItemsList.findIndex(
+      (product) => product.title === item.title
+    );
+    const existItem = cartItemsList[existItemIndex];
+    if (existItem) {
+      const updateItem = {
+        ...existItem,
+        quantity: existItem.quantity + 1,
+      };
+      const updatedList = [...cartItemsList];
+      updatedList[existItemIndex] = updateItem;
+      setCartItemsList([...updatedList]);
+    } else {
+      setCartItemsList([...cartItemsList, item]);
+    }
+  };
 
-        const removeCartItemsHandler=(item)=>{
-            setCartItems(cartItems.filter((product)=> product.name!=item.name))
-        }
+  const removeItemsToCart = (item) => {
+    setCartItemsList(cartItemsList.filter((product)=> product.title!=item.title))
+  };
 
-  const cartContext = {
-    cartItems: cartItems,
-    addItems: addCartItemsHandler,
-    removeItems: removeCartItemsHandler,
+  const cart_Value = {
+    cartList: cartItemsList,
+    addList: addItemsToCart,
+    removeList: removeItemsToCart,
   };
   return (
-    <CartContext.Provider value={cartContext}>
+    <CartMainContext.Provider value={cart_Value}>
       {props.children}
-    </CartContext.Provider>
+    </CartMainContext.Provider>
   );
 };
 
