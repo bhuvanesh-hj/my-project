@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useCallback, useEffect, useState } from "react";
 import MoviesList from "./components/MoviesList";
 import "./App.css";
 
@@ -9,7 +8,7 @@ function App() {
   const [errorHandler, setErrorHandler] = useState(null);
   const [retry, setRetry] = useState(false);
 
-  async function fetchMovieHandler() {
+  const fetchMovieHandler = useCallback(async function() {
     setIsloading(true);
     setErrorHandler(null);
     try {
@@ -36,7 +35,7 @@ function App() {
       setErrorHandler(error.message);
     }
     setIsloading(false);
-  }
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -52,6 +51,10 @@ function App() {
     setRetry(false);
     setErrorHandler("Canceled");
   };
+
+  useEffect(() => {
+    fetchMovieHandler();
+  }, [fetchMovieHandler]);
 
   return (
     <React.Fragment>
