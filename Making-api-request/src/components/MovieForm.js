@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import classes from "./AddMovie.module.css";
 
-const MovieForm = () => {
+const MovieForm = (args) => {
   const titleInputRef = useRef();
   const openingTextInputRef = useRef();
   const releaseDateInputRef = useRef();
@@ -13,7 +13,7 @@ const MovieForm = () => {
       openingText: openingTextInputRef.current.value,
       releaseDate: releaseDateInputRef.current.value,
     };
-    console.log(NewMovie);
+    args.addMovie(NewMovie)
     titleInputRef.current.value = "";
     openingTextInputRef.current.value = "";
     releaseDateInputRef.current.value = "";
