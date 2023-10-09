@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Alert, Button, CloseButton, Form, Table } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Button, CloseButton, Table } from "react-bootstrap";
 import CartContext from "../Store/CartMainContext";
 
 const Cart = (props) => {
@@ -17,17 +17,16 @@ const Cart = (props) => {
     return (
       <tr key={item.title} style={{ textAlign: "center" }}>
         <td>
-          {
-            <img
-              src={item.imageUrl}
-              style={{
-                width: 80,
-                height: 80,
-                marginRight: 20,
-                borderRadius: 8,
-              }}
-            />
-          }
+          <img
+            src={item.imageUrl}
+            alt="Error in  render"
+            style={{
+              width: 80,
+              height: 80,
+              marginRight: 20,
+              borderRadius: 8,
+            }}
+          />
           {item.title}
         </td>
         <td>{item.price}</td>

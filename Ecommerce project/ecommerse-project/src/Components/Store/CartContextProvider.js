@@ -23,7 +23,9 @@ const CartContextProvider = (props) => {
   };
 
   const removeItemsToCart = (item) => {
-    setCartItemsList(cartItemsList.filter((product)=> product.title!=item.title))
+    setCartItemsList(
+      cartItemsList.filter((product) => product.title !== item.title)
+    );
   };
 
   const cart_Value = {

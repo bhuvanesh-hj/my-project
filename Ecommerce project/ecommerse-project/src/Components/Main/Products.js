@@ -1,8 +1,5 @@
 import React from "react";
 import ProductCard from "./ProductCard";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 const Products = () => {
   const productsArr = [
@@ -54,28 +51,43 @@ const Products = () => {
   // });
 
   return (
-    <div
-      style={{
-        display: "flex",
-        marginTop: "30px",
-        flexWrap: "wrap",
-        width:"70%",
-        justifyContent: "space-between",
-        alignItems:"center",
-        margin:"auto",
-      }}
-    >
-      {productsArr.map((product) => {
-        return (
-          <ProductCard key={product.title}
-          item={product}
-            title={product.title}
-            price={product.price}
-            image={product.imageUrl}
-          />
-        );
-      })}
-    </div>
+    <>
+      <h3
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 10,
+          fontFamily: "monospace",
+        }}
+      >
+        {" "}
+        Products
+      </h3>
+      <div
+        style={{
+          display: "flex",
+          marginTop: "30px",
+          flexWrap: "wrap",
+          width: "70%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          margin: "auto",
+        }}
+      >
+        {productsArr.map((product) => {
+          return (
+            <ProductCard
+              key={product.title}
+              item={product}
+              title={product.title}
+              price={product.price}
+              image={product.imageUrl}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 };
 
