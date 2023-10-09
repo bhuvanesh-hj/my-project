@@ -11,6 +11,7 @@ import CartContextProvider from "./Components/Store/CartContextProvider";
 import About from "./Components/Pages/About";
 import Root from "./Components/Pages/Root";
 import Home from "./Components/Pages/Home";
+import ContactUs from "./Components/Pages/ContactUs";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: "/products", element: <Products /> },
       { path: "/about", element: <About /> },
       { path: "/home", element: <Home /> },
+      { path: "/contactUs", element: <ContactUs /> },
     ],
   },
 ]);

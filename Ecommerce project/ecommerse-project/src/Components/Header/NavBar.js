@@ -54,6 +54,18 @@ const ContainerOutsideExample = (props) => {
               About
             </NavLink>
           </Nav.Link>
+          <Nav.Link>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "text-white border border-primary rounded py-1 px-1"
+                  : "text-secondary "
+              }
+              to="/contactUs"
+            >
+              ContactUs
+            </NavLink>
+          </Nav.Link>
         </Nav>
       </Container>
       <Button
