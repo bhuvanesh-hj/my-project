@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import ControlContext from "./ControlContext";
 
+const getTokenFromLocalStorage = localStorage.getItem("idToken");
+
 const ControlContextProvider = (props) => {
-  const [saveToken, setSaveToken] = useState(null);
-  
-  const isLogedInStatus= !!saveToken
+  const [saveToken, setSaveToken] = useState(getTokenFromLocalStorage);
+
+  const isLogedInStatus = !!saveToken;
 
   const addTokenHandler = (token) => {
     setSaveToken(token);
