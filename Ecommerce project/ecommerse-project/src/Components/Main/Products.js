@@ -1,42 +1,44 @@
 import React from "react";
 import ProductCard from "./ProductCard";
+import { Link } from "react-router-dom";
+import ProductDetail from "../Pages/ProductDetail";
 
 const Products = () => {
   const productsArr = [
     {
-      title: "Colors",
+      title: "Men Fancy Shirts",
 
       price: 100,
 
       imageUrl:
-        "https://prasadyash2411.github.io/ecom-website/img/Album%201.png",
+        "https://m.media-amazon.com/images/I/71ShBw4g6GL._UX679_.jpg",
     },
 
     {
-      title: "Black and white Colors",
+      title: "Men's Poly Cotton",
 
       price: 50,
 
       imageUrl:
-        "https://prasadyash2411.github.io/ecom-website/img/Album%202.png",
+        "https://m.media-amazon.com/images/I/81GX4lKKt-L._UY879_.jpg",
     },
 
     {
-      title: "Yellow and Black Colors",
+      title: "Digital Printed Half Sleeve Shirt",
 
       price: 70,
 
       imageUrl:
-        "https://prasadyash2411.github.io/ecom-website/img/Album%203.png",
+        "https://m.media-amazon.com/images/I/816M5cixMgL._UY879_.jpg",
     },
 
     {
-      title: "Blue Color",
+      title: "Sports Men Pants",
 
       price: 100,
 
       imageUrl:
-        "https://prasadyash2411.github.io/ecom-website/img/Album%204.png",
+        "https://m.media-amazon.com/images/I/51IivLANozL._UX679_.jpg",
     },
   ];
 
@@ -77,13 +79,13 @@ const Products = () => {
       >
         {productsArr.map((product) => {
           return (
-            <ProductCard
-              key={product.title}
-              item={product}
-              title={product.title}
-              price={product.price}
-              image={product.imageUrl}
-            />
+              <ProductCard
+                key={product.title}
+                item={product}
+                title={product.title}
+                price={product.price}
+                image={product.imageUrl}
+              />
           );
         })}
       </div>

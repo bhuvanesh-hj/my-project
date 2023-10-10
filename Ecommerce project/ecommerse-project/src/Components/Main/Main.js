@@ -1,6 +1,4 @@
 import React from "react";
-import Container from "react-bootstrap/esm/Container";
-import { Row, Col } from "react-bootstrap";
 
 const Main = () => {
   return (

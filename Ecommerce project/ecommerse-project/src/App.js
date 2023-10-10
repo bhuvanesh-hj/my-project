@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import NavBar from "./Components/Header/NavBar";
 import Main from "./Components/Main/Main";
@@ -9,47 +8,65 @@ import Cart from "./Components/Cart/Cart";
 import { Button, Container } from "react-bootstrap";
 import CartContextProvider from "./Components/Store/CartContextProvider";
 import About from "./Components/Pages/About";
-import Root from "./Components/Pages/Root";
 import Home from "./Components/Pages/Home";
 import ContactUs from "./Components/Pages/ContactUs";
+import { Route , Switch , Redirect} from "react-router-dom";
+import ProductDetail from "./Components/Pages/ProductDetail";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    children: [
-      { path: "/products", element: <Products /> },
-      { path: "/about", element: <About /> },
-      { path: "/home", element: <Home /> },
-      { path: "/contactUs", element: <ContactUs /> },
-    ],
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <Root />,
+//     children: [
+//       { path: "/products", element: <Products /> },
+//       { path: "/about", element: <About /> },
+//       { path: "/home", element: <Home /> },
+//       { path: "/contactUs", element: <ContactUs /> },
+//     ],
+//   },
+// ]);
 
 function App() {
-  // const [cartValid, setCartValid] = useState(false);
+  const [cartValid, setCartValid] = useState(false);
 
-  // const CartHandler = (valid) => {
-  //   setCartValid(valid);
-  // };
+  const CartHandler = (valid) => {
+    setCartValid(valid);
+  };
 
   return (
-    <RouterProvider router={router}>
-      {/* <CartContextProvider> */}
-      {/* <NavBar show={CartHandler} />
-        {cartValid && <Cart hide={CartHandler} />}
-        <Main /> */}
+    <CartContextProvider>
+      <NavBar show={CartHandler} />
+      {cartValid && <Cart hide={CartHandler} />}
+      <Main />
       <main>
-        {/* <Products />
+        <Switch>
+          <Route path="/" exact>
+            <Redirect to="/home"/>
+          </Route>
+        <Route path="/products" exact>
+          <Products />
           <Container className="m-auto">
             <Button onClick={() => CartHandler(true)} variant="dark">
               See Cart
             </Button>
-          </Container> */}
+          </Container>
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/home">
+          <Home />
+        </Route>
+        <Route path="/contactUs">
+          <ContactUs />
+        </Route>
+        <Route path="/products/:productId">
+          <ProductDetail/>
+        </Route>
+        </Switch>
       </main>
-      {/* <Footer />
-      </CartContextProvider> */}
-    </RouterProvider>
+      <Footer />
+    </CartContextProvider>
   );
 }
 
