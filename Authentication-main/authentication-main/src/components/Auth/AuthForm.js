@@ -60,7 +60,6 @@ const AuthForm = () => {
       .then((data) => {
         ctx.addToken(data.idToken);
         history.replace("/");
-        localStorage.setItem("idToken",JSON.stringify(data.idToken))
       })
       .catch((error) => {
         alert(error.message);

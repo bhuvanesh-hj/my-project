@@ -14,7 +14,6 @@ const MainNavigation = () => {
   const logOutHandler = () => {
     ctxNav.removeToken();
     history.replace("/auth")
-    localStorage.clear("idToken")
   };
 
   return (
