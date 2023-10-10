@@ -1,4 +1,5 @@
 import React, { useContext, useRef } from "react";
+import { useHistory } from "react-router-dom";
 
 import classes from "./ProfileForm.module.css";
 import ControlContext from "../../store/ControlContext";
@@ -6,6 +7,7 @@ import ControlContext from "../../store/ControlContext";
 const ProfileForm = () => {
   const passwordInputRef = useRef();
   const authCtx = useContext(ControlContext);
+  const history = useHistory();
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -27,6 +29,7 @@ const ProfileForm = () => {
       }
     ).then((res) => {
       passwordInputRef.current.value = "";
+      history.replace("/")
     });
   };
 

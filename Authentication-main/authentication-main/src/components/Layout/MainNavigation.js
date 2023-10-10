@@ -1,16 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import classes from "./MainNavigation.module.css";
+import { Link, useHistory } from "react-router-dom";
 import { useContext } from "react";
+
+import classes from "./MainNavigation.module.css";
 import ControlContext from "../../store/ControlContext";
 
 const MainNavigation = () => {
   const ctxNav = useContext(ControlContext);
+  const history = useHistory();
 
   const isLogedIn = ctxNav.logedIn;
 
   const logOutHandler = () => {
     ctxNav.removeToken();
+    history.replace("/auth")
   };
 
   return (
