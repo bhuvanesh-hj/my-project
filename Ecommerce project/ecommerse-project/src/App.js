@@ -10,8 +10,9 @@ import CartContextProvider from "./Components/Store/CartContextProvider";
 import About from "./Components/Pages/About";
 import Home from "./Components/Pages/Home";
 import ContactUs from "./Components/Pages/ContactUs";
-import { Route , Switch , Redirect} from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import ProductDetail from "./Components/Pages/ProductDetail";
+import LogInPage from "./Components/Pages/LogInPage";
 
 // const router = createBrowserRouter([
 //   {
@@ -41,28 +42,34 @@ function App() {
       <main>
         <Switch>
           <Route path="/" exact>
-            <Redirect to="/home"/>
+            <Redirect to="/home" />
           </Route>
-        <Route path="/products" exact>
-          <Products />
-          <Container className="m-auto">
-            <Button onClick={() => CartHandler(true)} variant="dark">
-              See Cart
-            </Button>
-          </Container>
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/home">
-          <Home />
-        </Route>
-        <Route path="/contactUs">
-          <ContactUs />
-        </Route>
-        <Route path="/products/:productId">
-          <ProductDetail/>
-        </Route>
+          <Route path="/products" exact>
+            <Container className="m-auto">
+              <Products />
+              <Button onClick={() => CartHandler(true)} variant="dark">
+                See Cart
+              </Button>
+            </Container>
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/home">
+            <Home />
+          </Route>
+          <Route path="/contactUs">
+            <ContactUs />
+          </Route>
+          <Route path="/products/:productId">
+            <ProductDetail />
+          </Route>
+          <Route path="/login">
+                <LogInPage/>
+          </Route>
+          <Route path="*">
+              <Redirect to="/home"/>
+          </Route>
         </Switch>
       </main>
       <Footer />

@@ -2,7 +2,21 @@ import React, { useState } from "react";
 import CartMainContext from "./CartMainContext";
 
 const CartContextProvider = (props) => {
+  const locaalstorageToken = localStorage.getItem("token");
   const [cartItemsList, setCartItemsList] = useState([]);
+  const [saveToken, setSaveToken] = useState(locaalstorageToken);
+
+  const logInStatus = !!saveToken;
+
+  const logInHandler=(token)=>{
+    setSaveToken(token)
+    localStorage.setItem("token",token)
+  }
+
+  const logOutHandler=()=>{
+    setSaveToken(null)
+    localStorage.removeItem("token")
+  }
 
   const addItemsToCart = (item) => {
     const existItemIndex = cartItemsList.findIndex(
@@ -29,6 +43,10 @@ const CartContextProvider = (props) => {
   };
 
   const cart_Value = {
+    idToken: saveToken,
+    isLoggedIn: logInStatus,
+    logIn: logInHandler,
+    logout: logOutHandler,
     cartList: cartItemsList,
     addList: addItemsToCart,
     removeList: removeItemsToCart,

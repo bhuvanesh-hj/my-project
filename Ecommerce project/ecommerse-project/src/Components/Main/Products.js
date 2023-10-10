@@ -71,7 +71,7 @@ const Products = () => {
           display: "flex",
           marginTop: "30px",
           flexWrap: "wrap",
-          width: "70%",
+          width: "65%",
           justifyContent: "space-between",
           alignItems: "center",
           margin: "auto",

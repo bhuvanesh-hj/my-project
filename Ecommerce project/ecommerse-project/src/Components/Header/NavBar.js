@@ -12,10 +12,10 @@ const ContainerOutsideExample = (props) => {
     <Navbar
       bg="dark"
       data-bs-theme="dark"
-      style={{ position: "fixed", width: "100%", marginTop: -30 }}
+      style={{ position: "fixed", width: "100%", height:"70px", marginTop: -30 }}
     >
       <Container>
-        <Navbar.Brand href="#home">React Mart</Navbar.Brand>
+        <Navbar.Brand>React Mart</Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link>
             <NavLink
@@ -66,11 +66,23 @@ const ContainerOutsideExample = (props) => {
               ContactUs
             </NavLink>
           </Nav.Link>
+          <Nav.Link>
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? "text-white border border-primary rounded py-1 px-1"
+                  : "text-secondary "
+              }
+              to="/login"
+            >
+              Login
+            </NavLink>
+          </Nav.Link>
         </Nav>
       </Container>
       <Button
         variant="secondary"
-        size="lg"
+        size="md"
         active
         className="me-3"
         onClick={() => props.show(true)}
