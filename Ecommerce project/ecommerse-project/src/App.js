@@ -1,18 +1,21 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Button, Container } from "react-bootstrap";
+import { Route, Switch, Redirect } from "react-router-dom";
+
 import "./App.css";
 import NavBar from "./Components/Header/NavBar";
 import Main from "./Components/Main/Main";
 import Footer from "./Components/Fotter/Footer";
 import Products from "./Components/Main/Products";
 import Cart from "./Components/Cart/Cart";
-import { Button, Container } from "react-bootstrap";
-import CartContextProvider from "./Components/Store/CartContextProvider";
+import React from "react";
 import About from "./Components/Pages/About";
 import Home from "./Components/Pages/Home";
 import ContactUs from "./Components/Pages/ContactUs";
-import { Route, Switch, Redirect } from "react-router-dom";
 import ProductDetail from "./Components/Pages/ProductDetail";
 import LogInPage from "./Components/Pages/LogInPage";
+import CartContextProvider from "./Components/Store/CartContextProvider";
+import CartMainContext from "./Components/Store/CartMainContext";
 
 // const router = createBrowserRouter([
 //   {
@@ -29,13 +32,14 @@ import LogInPage from "./Components/Pages/LogInPage";
 
 function App() {
   const [cartValid, setCartValid] = useState(false);
+  const ctx = useContext(CartMainContext);
 
   const CartHandler = (valid) => {
     setCartValid(valid);
   };
-
+  
   return (
-    <CartContextProvider>
+    <>
       <NavBar show={CartHandler} />
       {cartValid && <Cart hide={CartHandler} />}
       <Main />
@@ -44,13 +48,17 @@ function App() {
           <Route path="/" exact>
             <Redirect to="/home" />
           </Route>
+
           <Route path="/products" exact>
-            <Container className="m-auto">
+            {ctx.isLoggedIn && (
+              // <Container className="m-auto">
               <Products />
-              <Button onClick={() => CartHandler(true)} variant="dark">
-                See Cart
-              </Button>
-            </Container>
+              //   <Button onClick={() => CartHandler(true)} variant="dark">
+              //     See Cart
+              //   </Button>
+              // </Container>
+            )}
+            {!ctx.isLoggedIn && <Redirect to="/login" />}
           </Route>
           <Route path="/about">
             <About />
@@ -64,16 +72,18 @@ function App() {
           <Route path="/products/:productId">
             <ProductDetail />
           </Route>
-          <Route path="/login">
-                <LogInPage/>
-          </Route>
+          {!ctx.isLoggedIn && (
+            <Route path="/login">
+              <LogInPage />
+            </Route>
+          )}
           <Route path="*">
-              <Redirect to="/home"/>
+            <Redirect to="/home" />
           </Route>
         </Switch>
       </main>
       <Footer />
-    </CartContextProvider>
+    </>
   );
 }
 

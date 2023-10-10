@@ -4,15 +4,28 @@ import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import { useContext } from "react";
 import CartMainContext from "../Store/CartMainContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
 const ContainerOutsideExample = (props) => {
   const ctxNav = useContext(CartMainContext);
+  const ctx = useContext(CartMainContext);
+  const history = useHistory()
+
+  const logOutHandler=()=>{
+    ctx.logout();
+    history.replace("/login")
+  }
+
   return (
     <Navbar
       bg="dark"
       data-bs-theme="dark"
-      style={{ position: "fixed", width: "100%", height:"70px", marginTop: -30 }}
+      style={{
+        position: "fixed",
+        width: "100%",
+        height: "70px",
+        marginTop: -30,
+      }}
     >
       <Container>
         <Navbar.Brand>React Mart</Navbar.Brand>
@@ -66,7 +79,7 @@ const ContainerOutsideExample = (props) => {
               ContactUs
             </NavLink>
           </Nav.Link>
-          <Nav.Link>
+          {!ctx.isLoggedIn && <Nav.Link>
             <NavLink
               className={({ isActive }) =>
                 isActive
@@ -77,7 +90,8 @@ const ContainerOutsideExample = (props) => {
             >
               Login
             </NavLink>
-          </Nav.Link>
+          </Nav.Link>}
+          {ctx.isLoggedIn && <Button variant="dark" onClick={logOutHandler}>Log out</Button>}
         </Nav>
       </Container>
       <Button

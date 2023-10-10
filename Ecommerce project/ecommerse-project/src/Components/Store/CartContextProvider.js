@@ -3,8 +3,8 @@ import CartMainContext from "./CartMainContext";
 
 const CartContextProvider = (props) => {
   const locaalstorageToken = localStorage.getItem("token");
-  const [cartItemsList, setCartItemsList] = useState([]);
   const [saveToken, setSaveToken] = useState(locaalstorageToken);
+  const [cartItemsList, setCartItemsList] = useState([]);
 
   const logInStatus = !!saveToken;
 
