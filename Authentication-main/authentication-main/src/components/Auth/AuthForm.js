@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
-
+import { useState, useRef, useContext } from "react";
+import ControlContext from "../../store/ControlContext";
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+  const ctx = useContext(ControlContext);
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,10 +55,10 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        console.log(data)
+        ctx.addToken(data.idToken)
       })
       .catch((error) => {
-        alert(error.message)
+        alert(error.message);
       });
   };
 
