@@ -11,7 +11,7 @@ const CartContextProvider = (props) => {
 
   const fetchInfo = () => {
     return fetch(
-      `https://crudcrud.com/api/97674bb7b36844d8a86ae1d9c70d70e1/cart${email}`
+      `https://crudcrud.com/api/bf5b574de4e04d7d883b58f3bf958f2b/cart${email}`
     ).then((res) => {
       return res.json().then((data) => {
         setCartItemsList(data);
@@ -19,11 +19,12 @@ const CartContextProvider = (props) => {
     });
   };
 
-  const logInHandler = useCallback((token, email) => {
+  const logInHandler = (token, email) => {
     setSaveToken(token);
     localStorage.setItem("token", token);
     localStorage.setItem("email", email.substring(0, 11));
-  }, []);
+    // fetchInfo()
+  };
 
   const logOutHandler = () => {
     setSaveToken(null);
@@ -49,7 +50,7 @@ const CartContextProvider = (props) => {
       return;
     }
     fetch(
-      `https://crudcrud.com/api/97674bb7b36844d8a86ae1d9c70d70e1/cart${email}`,
+      `https://crudcrud.com/api/bf5b574de4e04d7d883b58f3bf958f2b/cart${email}`,
       {
         method: "POST",
         body: JSON.stringify(item),
@@ -57,26 +58,32 @@ const CartContextProvider = (props) => {
           "Content-Type": "application/json",
         },
       }
-    ).then((res) => {});
-    setCartItemsList([...cartItemsList, item]);
+    ).then((res) => {
+      fetchInfo();
+    });
+    // setCartItemsList([...cartItemsList, item]);
     // }
   };
 
-  const removeItemsToCart = useCallback((item) => {
+  const removeItemsToCart = (item) => {
     fetch(
-      `https://crudcrud.com/api/97674bb7b36844d8a86ae1d9c70d70e1/cart${email}/${item._id}`,
+      `https://crudcrud.com/api/bf5b574de4e04d7d883b58f3bf958f2b/cart${email}/${item._id}`,
       {
         method: "DELETE",
       }
-    ).then((res) => {});
+    ).then((res) => {
+      fetchInfo();
+    });
     //   setCartItemsList(
     // cartItemsList.filter((product) => product.title !== item.title)
     //   )
-  }, []);
+  };
 
   useEffect(() => {
-    fetchInfo();
-  }, [setCartItemsList, logInHandler]);
+    if (logInStatus) {
+      fetchInfo();
+    }
+  }, [setCartItemsList,logInStatus]);
 
   const cart_Value = {
     idToken: saveToken,

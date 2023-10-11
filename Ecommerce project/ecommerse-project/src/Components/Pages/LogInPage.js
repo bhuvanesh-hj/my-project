@@ -1,22 +1,36 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
 import CartMainContext from "../Store/CartMainContext";
 
 const LogInPage = () => {
+  const [logIn, setLogIn] = useState(true);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const history = useHistory();
   const ctx = useContext(CartMainContext);
 
+  const logInHandler = () => {
+    setLogIn((prev) => !prev);
+  };
+
   const submitHandler = (event) => {
     event.preventDefault();
+    let URL = "";
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
+    if (logIn) {
+      URL =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk";
+    } else {
+      URL =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk";
+    }
+
     fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk",
+      URL,
       {
         method: "POST",
         body: JSON.stringify({
@@ -40,9 +54,9 @@ const LogInPage = () => {
         }
       })
       .then((data) => {
-        ctx.logIn(data.idToken,data.email);
-        emailInputRef.current.value=""
-        passwordInputRef.current.value=""
+        ctx.logIn(data.idToken, data.email);
+        emailInputRef.current.value = "";
+        passwordInputRef.current.value = "";
         history.replace("/products");
       })
       .catch((error) => {
@@ -63,7 +77,7 @@ const LogInPage = () => {
       onSubmit={submitHandler}
     >
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <h3>Please sign in</h3>
+        <h3>Please sign {logIn ? "in" : "up"}</h3>
       </div>
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
@@ -89,8 +103,12 @@ const LogInPage = () => {
       </Form.Group>
       <br />
       <Button variant="primary" type="submit">
-        LogIn
+        {logIn ? "LogIn" : "Sign up"}
       </Button>
+      <br />
+      <a onClick={logInHandler} href="#" style={{ cursor: "pointer" }}>
+        {logIn ? "Create a new account" : "Already have an account"}
+      </a>
     </Form>
   );
 };
