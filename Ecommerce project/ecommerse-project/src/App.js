@@ -41,7 +41,7 @@ function App() {
   return (
     <>
       <NavBar show={CartHandler} />
-      {cartValid && <Cart hide={CartHandler} />}
+      { cartValid && <Cart hide={CartHandler} />}
       <Main />
       <main>
         <Switch>
@@ -51,12 +51,12 @@ function App() {
 
           <Route path="/products" exact>
             {ctx.isLoggedIn && (
-              // <Container className="m-auto">
+              <Container className="m-auto">
               <Products />
-              //   <Button onClick={() => CartHandler(true)} variant="dark">
-              //     See Cart
-              //   </Button>
-              // </Container>
+                 <Button onClick={() => CartHandler(true)} variant="dark">
+                 See Cart
+                </Button>
+               </Container>
             )}
             {!ctx.isLoggedIn && <Redirect to="/login" />}
           </Route>
@@ -70,7 +70,9 @@ function App() {
             <ContactUs />
           </Route>
           <Route path="/products/:productId">
-            <ProductDetail />
+            {ctx.isLoggedIn && 
+            <ProductDetail />}
+            {!ctx.isLoggedIn && <Redirect to="/login"/>}
           </Route>
           {!ctx.isLoggedIn && (
             <Route path="/login">

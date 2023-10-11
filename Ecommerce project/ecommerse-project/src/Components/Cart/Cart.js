@@ -30,7 +30,7 @@ const Cart = (props) => {
           {item.title}
         </td>
         <td>{item.price}</td>
-        <td>{item.quantity}</td>
+        <td><input type="number" max={3} min={1} style={{width:"35px"}} defaultValue={item.quantity}/></td>
         <td>
           <Button
             variant="outline-danger"

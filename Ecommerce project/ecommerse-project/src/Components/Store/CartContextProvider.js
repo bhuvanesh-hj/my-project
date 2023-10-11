@@ -1,22 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import CartMainContext from "./CartMainContext";
 
 const CartContextProvider = (props) => {
   const locaalstorageToken = localStorage.getItem("token");
   const [saveToken, setSaveToken] = useState(locaalstorageToken);
-  const [cartItemsList, setCartItemsList] = useState([]);
-
   const logInStatus = !!saveToken;
 
-  const logInHandler=(token)=>{
-    setSaveToken(token)
-    localStorage.setItem("token",token)
-  }
+  let email = localStorage.getItem("email");
+  const [cartItemsList, setCartItemsList] = useState([]);
 
-  const logOutHandler=()=>{
-    setSaveToken(null)
-    localStorage.removeItem("token")
-  }
+  const fetchInfo = () => {
+    return fetch(
+      `https://crudcrud.com/api/97674bb7b36844d8a86ae1d9c70d70e1/cart${email}`
+    ).then((res) => {
+      return res.json().then((data) => {
+        setCartItemsList(data);
+      });
+    });
+  };
+
+  const logInHandler = useCallback((token, email) => {
+    setSaveToken(token);
+    localStorage.setItem("token", token);
+    localStorage.setItem("email", email.substring(0, 11));
+  }, []);
+
+  const logOutHandler = () => {
+    setSaveToken(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+  };
 
   const addItemsToCart = (item) => {
     const existItemIndex = cartItemsList.findIndex(
@@ -24,23 +37,46 @@ const CartContextProvider = (props) => {
     );
     const existItem = cartItemsList[existItemIndex];
     if (existItem) {
-      const updateItem = {
-        ...existItem,
-        quantity: existItem.quantity + 1,
-      };
-      const updatedList = [...cartItemsList];
-      updatedList[existItemIndex] = updateItem;
-      setCartItemsList([...updatedList]);
-    } else {
-      setCartItemsList([...cartItemsList, item]);
+      //   const updateItem = {
+      //     ...existItem,
+      //     quantity: existItem.quantity + 1,
+      //   };
+      //   const updatedList = [...cartItemsList];
+      //   updatedList[existItemIndex] = updateItem;
+      //   setCartItemsList([...updatedList]);
+      // } else {
+      alert("Product already exist");
+      return;
     }
+    fetch(
+      `https://crudcrud.com/api/97674bb7b36844d8a86ae1d9c70d70e1/cart${email}`,
+      {
+        method: "POST",
+        body: JSON.stringify(item),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((res) => {});
+    setCartItemsList([...cartItemsList, item]);
+    // }
   };
 
-  const removeItemsToCart = (item) => {
-    setCartItemsList(
-      cartItemsList.filter((product) => product.title !== item.title)
-    );
-  };
+  const removeItemsToCart = useCallback((item) => {
+    fetch(
+      `https://crudcrud.com/api/97674bb7b36844d8a86ae1d9c70d70e1/cart${email}/${item._id}`,
+      {
+        method: "DELETE",
+      }
+    ).then((res) => {});
+    //   setCartItemsList(
+    // cartItemsList.filter((product) => product.title !== item.title)
+    //   )
+  }, []);
+
+  useEffect(() => {
+    fetchInfo();
+  }, [setCartItemsList, logInHandler]);
 
   const cart_Value = {
     idToken: saveToken,

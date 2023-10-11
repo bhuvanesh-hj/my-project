@@ -94,7 +94,7 @@ const ContainerOutsideExample = (props) => {
           {ctx.isLoggedIn && <Button variant="dark" onClick={logOutHandler}>Log out</Button>}
         </Nav>
       </Container>
-      <Button
+      {ctx.isLoggedIn && <Button
         variant="secondary"
         size="md"
         active
@@ -102,7 +102,7 @@ const ContainerOutsideExample = (props) => {
         onClick={() => props.show(true)}
       >
         Cart{"   "} <span>{ctxNav.cartList.length}</span>
-      </Button>
+      </Button>}
     </Navbar>
   );
 };

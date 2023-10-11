@@ -40,7 +40,7 @@ const LogInPage = () => {
         }
       })
       .then((data) => {
-        ctx.logIn(data.idToken);
+        ctx.logIn(data.idToken,data.email);
         emailInputRef.current.value=""
         passwordInputRef.current.value=""
         history.replace("/products");
