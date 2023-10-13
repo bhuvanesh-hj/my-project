@@ -1,14 +1,33 @@
 import React from "react";
 import { Navbar, Container, NavbarBrand, Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom"
+
 
 const Header = () => {
   return (
     <Navbar variant="dark" bg="primary">
       <Container>
-        <NavbarBrand href="#">My Expense Tracker</NavbarBrand>
+        <NavbarBrand>
+          <NavLink
+            to="/home"
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            My Expense Tracker
+          </NavLink>
+        </NavbarBrand>
         <Nav className="mb-lg-0">
-          <Nav.Link href="#">Home</Nav.Link>
-          <Nav.Link href="#">About</Nav.Link>
+          <NavLink
+            to="/home"
+            style={{ color: "white", textDecoration: "none",marginRight:"10px" }}
+          >
+            Home
+          </NavLink>
+          <NavLink to="/home" style={{ color: "white", textDecoration: "none",marginRight:"10px" }}>
+            About
+          </NavLink>
+          <NavLink to="/login" style={{ color: "white", textDecoration: "none",marginRight:"10px" }}>
+            LogIn
+          </NavLink>
         </Nav>
       </Container>
     </Navbar>

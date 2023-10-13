@@ -7,13 +7,17 @@ import {
   Alert,
   Col,
 } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+ 
+  const history = useHistory();
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -46,8 +50,13 @@ const Login = () => {
         .then((res) => {
           if (res.ok) {
             res.json().then(async (data) => {
-              !login ? setLogin(true) : console.log("User sucessfully sigup");
-              e.target.reset()
+              if (login) {
+                localStorage.setItem("idToken", data.idToken);
+                history.replace("/home");
+                e.target.reset();
+              } else {
+                setLogin(true);
+              }
             });
           } else {
             throw new Error("Authentication failed");
@@ -93,7 +102,7 @@ const Login = () => {
             )}
             <br />
             <Button style={{ width: "100%" }} type="submit">
-              {login ? "Login" : "Signup"}
+              {login ? "LOG IN" : "SIGN UP"}
             </Button>
           </Form>
         </div>
