@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Navbar, Container, NavbarBrand, Nav } from "react-bootstrap";
+import { Navbar, Container, NavbarBrand, Nav, Button } from "react-bootstrap";
 import { NavLink, useHistory } from "react-router-dom";
 import Context from "../context/ContextProvider";
 
@@ -25,7 +25,7 @@ const Header = () => {
         if (res.ok) {
           res.json().then((data) => {
             alert("Otp sent to your email! please check it out");
-            ctx.verifyEmail(data.email)
+            ctx.verifyEmail(data.email);
             history.replace("/profile");
           });
         } else {
@@ -34,6 +34,12 @@ const Header = () => {
       })
       .catch((error) => alert(error));
   };
+
+  const logOutHandlerNav = () => {
+    ctx.logOut();
+    history.replace("/login");
+  };
+
   return (
     <Navbar variant="dark" bg="primary">
       <Container>
@@ -57,6 +63,16 @@ const Header = () => {
             Home
           </NavLink>
           <NavLink
+            to="/profile"
+            style={{
+              color: "white",
+              textDecoration: "none",
+              marginRight: "10px",
+            }}
+          >
+            Profile
+          </NavLink>
+          <NavLink
             to="/home"
             style={{
               color: "white",
@@ -66,7 +82,7 @@ const Header = () => {
           >
             About
           </NavLink>
-          {!ctx.emailVerified && (
+          {ctx.loginStatus && !ctx.emailVerified ? (
             <NavLink
               to="/profile"
               onClick={verifyEmailHandler}
@@ -78,17 +94,24 @@ const Header = () => {
             >
               Verify email
             </NavLink>
+          ) : (
+            ""
           )}
-          <NavLink
-            to="/login"
-            style={{
-              color: "white",
-              textDecoration: "none",
-              marginRight: "10px",
-            }}
-          >
-            LogIn
-          </NavLink>
+
+          {ctx.loginStatus ? (
+            <Button onClick={logOutHandlerNav} size="sm" variant="outline-danger">LogOut</Button>
+          ) : (
+            <NavLink
+              to="/login"
+              style={{
+                color: "white",
+                textDecoration: "none",
+                marginRight: "10px",
+              }}
+            >
+              <Button onClick={logOutHandlerNav} size="sm" variant="success">Log In</Button>
+            </NavLink>
+          )}
         </Nav>
       </Container>
     </Navbar>

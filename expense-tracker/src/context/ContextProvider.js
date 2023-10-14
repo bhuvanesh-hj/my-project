@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 const Context = React.createContext({
   idToken: "",
   loginStatus: false,
@@ -7,6 +8,7 @@ const Context = React.createContext({
   verifyEmail: (email) => {},
   emailVerified: false,
   email: "",
+  logOut: () => {},
 });
 
 export const ContextProvider = ({ children }) => {
@@ -15,6 +17,7 @@ export const ContextProvider = ({ children }) => {
   const [idToken, setIdToken] = useState(token);
   const [emailVerify, setEmailVerify] = useState(email);
 
+
   let login = !!idToken;
 
   let emailVerifyed = !!emailVerify;
@@ -22,6 +25,12 @@ export const ContextProvider = ({ children }) => {
   const loginHandler = (user) => {
     setIdToken(user.idToken);
     localStorage.setItem("idToken", user.idToken);
+  };
+
+  const logoutHandler = () => {
+    setIdToken(null);
+    // setEmailVerify(null);
+    localStorage.clear("idToken");
   };
 
   const emailHandler = (email) => {
@@ -36,6 +45,7 @@ export const ContextProvider = ({ children }) => {
     verifyEmail: emailHandler,
     emailVerified: emailVerifyed,
     email: emailVerify,
+    logOut: logoutHandler,
   };
   return <Context.Provider value={context}>{children}</Context.Provider>;
 };

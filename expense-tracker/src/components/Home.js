@@ -4,7 +4,7 @@ import Context from "../context/ContextProvider";
 
 const Home = () => {
   const ctx = useContext(Context);
-  
+
   return (
     <div
       style={{
@@ -14,9 +14,11 @@ const Home = () => {
       }}
     >
       <div>"Welcome to Expense Tracker!"</div>
-      {ctx.loginStatus && <div>
-        Your profile Incomplete.<Link to="/profile">Complete now!</Link>
-      </div>}
+      {(ctx.loginStatus && !ctx.emailVerified )? (
+        <div>
+          Your profile Incomplete.<Link to="/profile">Complete now!</Link>
+        </div>
+      ):""}
     </div>
   );
 };

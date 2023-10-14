@@ -10,9 +10,11 @@ import { FaUserCircle } from "react-icons/fa";
 import { HiOutlineLink } from "react-icons/hi";
 import { TiTick } from "react-icons/ti";
 import Context from "../context/ContextProvider";
+import { useHistory } from "react-router-dom"
 
 const Profile = () => {
   const ctx = useContext(Context);
+  const history = useHistory()
   const [details, setDetails] = useState({
     fullName: "",
     photoUrl: "",
@@ -105,7 +107,7 @@ const Profile = () => {
           {ctx.emailVerified && <i style={{color:"green"}}>{ctx.email} is varifyed<TiTick style={{color:"green"}}/></i>}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h5>Contact details </h5>
-          <Button size="sm" variant="outline-danger">
+          <Button size="sm" variant="outline-danger" onClick={()=>history.replace("/home")}>
             Cancel
           </Button>
         </div>
