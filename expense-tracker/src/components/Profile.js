@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { HiOutlineLink } from "react-icons/hi";
+import { TiTick } from "react-icons/ti";
 import Context from "../context/ContextProvider";
 
 const Profile = () => {
@@ -67,14 +68,12 @@ const Profile = () => {
     )
       .then((res) => {
         if (res.ok) {
-          res
-            .json()
-            .then((data) =>
-              setDetails({
-                fullName: data.users[0].displayName,
-                photoUrl: data.users[0].photoUrl,
-              })
-            );
+          res.json().then((data) =>
+            setDetails({
+              fullName: data.users[0].displayName,
+              photoUrl: data.users[0].photoUrl,
+            })
+          );
         } else {
           res.json().then((data) => {
             throw new Error(data.error.message);
@@ -87,15 +86,23 @@ const Profile = () => {
   }, []);
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      
       <Container
         style={{
-          width: "50%",
+          width: "30%",
           margin: "30px auto",
           backgroundColor: "rgb(246,247,242)",
           padding: "30px",
         }}
       >
+          {ctx.emailVerified && <i style={{color:"green"}}>{ctx.email} is varifyed<TiTick style={{color:"green"}}/></i>}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h5>Contact details </h5>
           <Button size="sm" variant="outline-danger">
