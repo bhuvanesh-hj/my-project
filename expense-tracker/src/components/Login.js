@@ -172,7 +172,7 @@ const Login = () => {
           </Form>
         </div>
       </div>
-      <Alert variant="success">
+      {!forgot && <Alert variant="success">
         <a
           href="#"
           onClick={() => setLogin(!login)}
@@ -184,7 +184,7 @@ const Login = () => {
         >
           {!login ? "Have an account? Login" : "Create a new account? Signup"}
         </a>
-      </Alert>
+      </Alert>}
     </div>
   );
 };

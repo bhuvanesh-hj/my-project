@@ -11,9 +11,9 @@ import Profile from "./components/Profile";
 function App() {
   const ctx = useContext(Context);
   return (
-    <div className="App">
+    <div className="App" style={{backgroundColor:"rgb(13,17,23)",height:"100vh"}}>
       <Header />
-      <div>
+      <div >
         <Switch>
           <Route exact path="/home" component={Home} />
           <Route exact path="/login" component={Login} />

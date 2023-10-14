@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-
 const Context = React.createContext({
   idToken: "",
   loginStatus: false,
@@ -9,6 +8,8 @@ const Context = React.createContext({
   emailVerified: false,
   email: "",
   logOut: () => {},
+  expenseList: [],
+  addExpense: (expense) => {},
 });
 
 export const ContextProvider = ({ children }) => {
@@ -16,7 +17,7 @@ export const ContextProvider = ({ children }) => {
   const email = localStorage.getItem("email");
   const [idToken, setIdToken] = useState(token);
   const [emailVerify, setEmailVerify] = useState(email);
-
+  const [expenseList, setExpenseList] = useState([]);
 
   let login = !!idToken;
 
@@ -38,6 +39,10 @@ export const ContextProvider = ({ children }) => {
     localStorage.setItem("email", email);
   };
 
+  const addExpenseHandler = (expense) => {
+    setExpenseList([...expenseList,expense])
+  };
+
   const context = {
     idToken: idToken,
     loginStatus: login,
@@ -46,6 +51,8 @@ export const ContextProvider = ({ children }) => {
     emailVerified: emailVerifyed,
     email: emailVerify,
     logOut: logoutHandler,
+    expenseList: expenseList,
+    addExpense: addExpenseHandler,
   };
   return <Context.Provider value={context}>{children}</Context.Provider>;
 };
