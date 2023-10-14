@@ -51,7 +51,7 @@ const Home = () => {
           ""
         )}
       </div>
-      <div
+      {ctx.loginStatus && <div
         style={{
           display: "flex",
           alignItems: "center",
@@ -146,7 +146,7 @@ const Home = () => {
             </CardBody>
           </Card>
         </Container>
-      </div>
+      </div>}
     </div>
   );
 };

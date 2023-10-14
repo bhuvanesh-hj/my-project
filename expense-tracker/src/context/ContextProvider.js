@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const Context = React.createContext({
   idToken: "",
@@ -39,9 +39,40 @@ export const ContextProvider = ({ children }) => {
     localStorage.setItem("email", email);
   };
 
-  const addExpenseHandler = (expense) => {
-    setExpenseList([...expenseList,expense])
+  const fetchExpenseList = async () => {
+    const response = await fetch(
+      "https://react-http-91704-default-rtdb.firebaseio.com/Expense.json"
+    );
+    const expenseMainList = await response.json();
+    let loadedList = [];
+    for (let key in expenseMainList) {
+      loadedList.push({
+        id: key,
+        Price: expenseMainList[key].Price,
+        Description: expenseMainList[key].Description,
+        Category: expenseMainList[key].Category,
+      });
+    }
+    setExpenseList(loadedList)
   };
+
+  const addExpenseHandler = async (expense) => {
+    const response = await fetch(
+      "https://react-http-91704-default-rtdb.firebaseio.com/Expense.json",
+      {
+        method: "POST",
+        body: JSON.stringify(expense),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    fetchExpenseList();
+  };
+
+  useEffect(()=>{
+    fetchExpenseList()
+  },[])
 
   const context = {
     idToken: idToken,
