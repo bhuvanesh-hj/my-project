@@ -10,6 +10,8 @@ const Context = React.createContext({
   logOut: () => {},
   expenseList: [],
   addExpense: (expense) => {},
+  deleteExpense: (id) => {},
+  editExpense: (id) => {},
 });
 
 export const ContextProvider = ({ children }) => {
@@ -22,26 +24,9 @@ export const ContextProvider = ({ children }) => {
   let login = !!idToken;
 
   let emailVerifyed = !!emailVerify;
-
-  const loginHandler = (user) => {
-    setIdToken(user.idToken);
-    localStorage.setItem("idToken", user.idToken);
-  };
-
-  const logoutHandler = () => {
-    setIdToken(null);
-    // setEmailVerify(null);
-    localStorage.clear("idToken");
-  };
-
-  const emailHandler = (email) => {
-    setEmailVerify(email);
-    localStorage.setItem("email", email);
-  };
-
   const fetchExpenseList = async () => {
     const response = await fetch(
-      "https://react-http-91704-default-rtdb.firebaseio.com/Expense.json"
+      `https://react-http-91704-default-rtdb.firebaseio.com/Expense${emailVerify && emailVerify.substring(0,6)}.json`
     );
     const expenseMainList = await response.json();
     let loadedList = [];
@@ -53,12 +38,32 @@ export const ContextProvider = ({ children }) => {
         Category: expenseMainList[key].Category,
       });
     }
-    setExpenseList(loadedList)
+    setExpenseList(loadedList);
   };
 
+
+  const loginHandler = (user) => {
+    setIdToken(user.idToken);
+    localStorage.setItem("idToken", user.idToken);
+    fetchExpenseList()
+  };
+
+  const logoutHandler = () => {
+    setIdToken(null);
+    setEmailVerify(null);
+    localStorage.clear("idToken");
+    fetchExpenseList()
+  };
+
+  const emailHandler = (email) => {
+    setEmailVerify(email);
+    localStorage.setItem("email", email);
+  };
+
+  
   const addExpenseHandler = async (expense) => {
     const response = await fetch(
-      "https://react-http-91704-default-rtdb.firebaseio.com/Expense.json",
+      `https://react-http-91704-default-rtdb.firebaseio.com/Expense${emailVerify.substring(0,6)}.json`,
       {
         method: "POST",
         body: JSON.stringify(expense),
@@ -70,9 +75,36 @@ export const ContextProvider = ({ children }) => {
     fetchExpenseList();
   };
 
-  useEffect(()=>{
-    fetchExpenseList()
-  },[])
+  const deleteExpenseHandler = async (id) => {
+    let response = await fetch(
+      `https://react-http-91704-default-rtdb.firebaseio.com/Expense${emailVerify.substring(0,6)}/${id}.json`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    fetchExpenseList();
+  };
+
+  const editExpenseHandler = async (expense) => {
+    let response = await fetch(
+      `https://react-http-91704-default-rtdb.firebaseio.com/Expense${emailVerify.substring(0,6)}/${expense.id}.json`,
+      {
+        method: "PUT",
+        body: JSON.stringify(expense),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    fetchExpenseList();
+  };
+
+  useEffect(() => {
+    fetchExpenseList();
+  }, [emailHandler]);
 
   const context = {
     idToken: idToken,
@@ -84,6 +116,8 @@ export const ContextProvider = ({ children }) => {
     logOut: logoutHandler,
     expenseList: expenseList,
     addExpense: addExpenseHandler,
+    deleteExpense: deleteExpenseHandler,
+    editExpense: editExpenseHandler,
   };
   return <Context.Provider value={context}>{children}</Context.Provider>;
 };

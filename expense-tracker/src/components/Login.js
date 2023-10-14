@@ -98,7 +98,10 @@ const Login = () => {
               throw new Error("Authentication failed");
             }
           })
-          .catch((error) => alert(error.message));
+          .catch((error) =>{
+            setLoading(false)
+            alert(error.message)
+          } );
       } else {
         setLoading(false)
         alert("Password did not match");
