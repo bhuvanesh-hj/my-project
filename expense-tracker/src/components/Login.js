@@ -11,14 +11,15 @@ import { useHistory } from "react-router-dom";
 import Context from "../context/ContextProvider";
 
 const Login = () => {
-  const ctx = useContext(Context)
+  const ctx = useContext(Context);
   const [login, setLogin] = useState(true);
+  const [forgot, setForgot] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
- 
   const history = useHistory();
 
   const handleChange = (e) => {
@@ -29,45 +30,80 @@ const Login = () => {
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    let URL = "";
-    if (login) {
-      URL =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk";
-    } else {
-      URL =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk";
-    }
-    if (login ? login : form.password === form.confirm_password) {
-      fetch(URL, {
-        method: "POST",
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-          returnSecureToken: true,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+
+    setLoading(true)
+    if (forgot) {
+      fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            requestType: "PASSWORD_RESET",
+            email: ctx.email,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
         .then((res) => {
           if (res.ok) {
-            res.json().then(async (data) => {
-              if (login) {
-                ctx.logIn(data)
-                history.replace("/home");
-                e.target.reset();
-              } else {
-                setLogin(true);
-              }
-            });
+            setLoading(false)
+            alert("Sucessfully sent pasword change link to your email");
+            setForgot(!forgot);
+            return;
           } else {
-            throw new Error("Authentication failed");
+            throw new Error("Failed to send request");
           }
         })
-        .catch((error) => alert(error.message));
+        .catch((error) => {
+          setLoading(false)
+          alert(error);
+        });
     } else {
-      alert("Password did not match");
-      return;
+      let URL = "";
+      if (login) {
+        URL =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk";
+      } else {
+        URL =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk";
+      }
+      if (login ? login : form.password === form.confirm_password) {
+        fetch(URL, {
+          method: "POST",
+          body: JSON.stringify({
+            email: form.email,
+            password: form.password,
+            returnSecureToken: true,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => {
+            if (res.ok) {
+              res.json().then(async (data) => {
+                if (login) {
+                  setLoading(false)
+                  ctx.logIn(data);
+                  history.replace("/home");
+                  e.target.reset();
+                } else {
+                  setLoading(false)
+                  setLogin(true);
+                }
+              });
+            } else {
+              throw new Error("Authentication failed");
+            }
+          })
+          .catch((error) => alert(error.message));
+      } else {
+        setLoading(false)
+        alert("Password did not match");
+        return;
+      }
     }
   };
 
@@ -79,19 +115,46 @@ const Login = () => {
           style={{ backgroundColor: "rgb(0,123,255)" }}
         >
           <h3 className="title" style={{ color: "white", textAlign: "center" }}>
-            {login ? "Login" : "Signup"}
+            {login
+              ? forgot
+                ? "Enter the email with which you have registered"
+                : "Login"
+              : "Signup"}
           </h3>
         </div>
         <div className="card-body">
           <Form onSubmit={submitHandler}>
             <FormLabel>Email :</FormLabel>
             <FormControl type="email" name="email" onChange={handleChange} />
-            <FormLabel>Password :</FormLabel>
-            <FormControl
-              type="password"
-              name="password"
-              onChange={handleChange}
-            />
+            {!forgot ? (
+              <div>
+                <FormLabel>Password :</FormLabel>
+                <FormControl
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                />
+              </div>
+            ) : (
+              ""
+            )}
+            {login ? (
+              <a
+                href="#"
+                onClick={() => setForgot(!forgot)}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  color: "rgb(210,0,0)",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {!forgot ? "Forgot password?" : "Have an account? Login"}
+              </a>
+            ) : (
+              ""
+            )}
             {!login && (
               <div>
                 <FormLabel>Confirm Password :</FormLabel>
@@ -104,7 +167,7 @@ const Login = () => {
             )}
             <br />
             <Button style={{ width: "100%" }} type="submit">
-              {login ? "LOG IN" : "SIGN UP"}
+              {loading ? "Loading..." : login ? (forgot ? "Send link" : "LOG IN") : "SIGN UP"}
             </Button>
           </Form>
         </div>
@@ -119,7 +182,7 @@ const Login = () => {
             color: "rgb(21,87,36)",
           }}
         >
-          {login ? "Create a new account? Signup" : "Have an account? Login"}
+          {!login ? "Have an account? Login" : "Create a new account? Signup"}
         </a>
       </Alert>
     </div>
