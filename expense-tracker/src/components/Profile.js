@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Container,
   FormLabel,
@@ -23,7 +23,7 @@ const Profile = () => {
       [e.target.name]: e.target.value,
     }));
   };
-// console.log(ctx.idToken)
+
   const submitHandler = (e) => {
     e.preventDefault();
     fetch(
@@ -40,15 +40,51 @@ const Profile = () => {
           "Content-Type": "application/json",
         },
       }
-    ).then((res) => {
-      if (res.ok) {
-      } else {
-        throw new Error("error");
-      }
-    }).catch(error=>{
-        alert(error)
-    })
+    )
+      .then((res) => {
+        if (res.ok) {
+        } else {
+          throw new Error("error");
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
+
+  useEffect(() => {
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          idToken: ctx.idToken,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => {
+        if (res.ok) {
+          res
+            .json()
+            .then((data) =>
+              setDetails({
+                fullName: data.users[0].displayName,
+                photoUrl: data.users[0].photoUrl,
+              })
+            );
+        } else {
+          res.json().then((data) => {
+            throw new Error(data.error.message);
+          });
+        }
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, []);
 
   return (
     <div>
@@ -69,10 +105,20 @@ const Profile = () => {
         <Form onSubmit={submitHandler}>
           <FaUserCircle style={{ fontSize: "20px", marginRight: "10px" }} />
           <FormLabel>Full Name:</FormLabel>
-          <FormControl type="text" onChange={changeHandler} name="fullName" />
+          <FormControl
+            type="text"
+            onChange={changeHandler}
+            name="fullName"
+            value={details.fullName}
+          />
           <HiOutlineLink style={{ fontSize: "20px", marginRight: "10px" }} />
           <FormLabel>Profile Photo URL:</FormLabel>
-          <FormControl type="url" onChange={changeHandler} name="photoUrl" />
+          <FormControl
+            type="url"
+            onChange={changeHandler}
+            name="photoUrl"
+            value={details.photoUrl}
+          />
           <br />
           <Button variant="outline-dark" type="submit">
             Update
