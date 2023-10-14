@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Form,
@@ -8,8 +8,10 @@ import {
   Col,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import Context from "../context/ContextProvider";
 
 const Login = () => {
+  const ctx = useContext(Context)
   const [login, setLogin] = useState(true);
   const [form, setForm] = useState({
     email: "",
@@ -51,7 +53,7 @@ const Login = () => {
           if (res.ok) {
             res.json().then(async (data) => {
               if (login) {
-                localStorage.setItem("idToken", data.idToken);
+                ctx.logIn(data)
                 history.replace("/home");
                 e.target.reset();
               } else {
