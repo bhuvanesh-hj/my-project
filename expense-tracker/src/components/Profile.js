@@ -9,17 +9,16 @@ import {
 import { FaUserCircle } from "react-icons/fa";
 import { HiOutlineLink } from "react-icons/hi";
 import { TiTick } from "react-icons/ti";
-import Context from "../context/ContextProvider";
-import { useHistory } from "react-router-dom"
-import { useSelector } from "react-redux"
-
+import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const idToken = useSelector(state=>state.auth.idToken)
-  const email = useSelector(state=>state.auth.email)
-  const emailVerified = useSelector(state=>state.auth.emailVerified)
+  const idToken = useSelector((state) => state.auth.idToken);
+  const email = useSelector((state) => state.auth.email);
+  const emailVerified = useSelector((state) => state.auth.emailVerified);
+  const darkMode = useSelector((state) => state.premium.darkMode);
   // const ctx = useContext(Context);
-  const history = useHistory()
+  const history = useHistory();
   const [details, setDetails] = useState({
     fullName: "",
     photoUrl: "",
@@ -100,19 +99,37 @@ const Profile = () => {
         alignItems: "center",
       }}
     >
-      
       <Container
-        style={{
-          width: "30%",
-          margin: "30px auto",
-          backgroundColor: "rgb(246,247,242)",
-          padding: "30px",
-        }}
+        style={
+          darkMode
+            ? {
+                width: "30%",
+                margin: "30px auto",
+                background: "rgb(30,30,30)",
+                color: "rgb(226,226,226)",
+                padding: "30px",
+              }
+            : {
+                width: "30%",
+                margin: "30px auto",
+                backgroundColor: "rgb(246,247,242)",
+                padding: "30px",
+              }
+        }
       >
-          {emailVerified && <i style={{color:"green"}}>{email} is varifyed<TiTick style={{color:"green"}}/></i>}
+        {emailVerified && (
+          <i style={{ color: "green" }}>
+            {email} is varifyed
+            <TiTick style={{ color: "green" }} />
+          </i>
+        )}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h5>Contact details </h5>
-          <Button size="sm" variant="outline-danger" onClick={()=>history.replace("/home")}>
+          <Button
+            size="sm"
+            variant="outline-danger"
+            onClick={() => history.replace("/home")}
+          >
             Cancel
           </Button>
         </div>
@@ -134,7 +151,7 @@ const Profile = () => {
             value={details.photoUrl}
           />
           <br />
-          <Button variant="outline-dark" type="submit">
+          <Button variant="outline-dark" type="submit" style={darkMode?{color:"white"}:{}}>
             Update
           </Button>
         </Form>

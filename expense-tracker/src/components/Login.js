@@ -116,7 +116,7 @@ const dispatch = useDispatch()
   };
 
   return (
-    <div className="container" style={{ width: "30%", marginTop: "6px" }}>
+    <div className="container" style={{ width: "30%", marginTop: "30px" }}>
       <div className="card">
         <div
           className="card-header"

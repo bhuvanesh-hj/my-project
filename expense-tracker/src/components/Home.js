@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Context from "../context/ContextProvider";
 import {
@@ -12,7 +12,7 @@ import {
   CardFooter,
   ModalFooter,
 } from "react-bootstrap";
-import Modal from 'react-bootstrap/Modal';
+import Modal from "react-bootstrap/Modal";
 import { Form } from "react-bootstrap";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
@@ -20,12 +20,15 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { MdModeEditOutline, MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseActions, fetchExpenseList } from "../store/ExpenseReducers";
+import { premiumActions } from "../store/PremiumReducers";
 
 const Home = () => {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
   const emailVerified = useSelector((state) => state.auth.emailVerified);
   const expenseList = useSelector((state) => state.expense.ExpenseList);
+  const darkMode = useSelector((state) => state.premium.darkMode);
+  const isSubscribed = useSelector((state) => state.premium.isSubscribed);
 
   // const ctx = useContext(Context);
   const [expenseDetails, setExpenseDetails] = useState({});
@@ -56,32 +59,37 @@ const Home = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if(total=>1000){
-      setSmShow(true)
-      return
-    }
+    if(!isSubscribed){
+    if (total >= 10000) {
+      setSmShow(true);
+      return;
+    }}
     if (edit) {
       dispatch(expenseActions.editExpense(edit));
-      dispatch(fetchExpenseList());
+      setTimeout(() => dispatch(fetchExpenseList()), 500);
       // ctx.editExpense(edit);
       setEdit(null);
     } else {
       dispatch(expenseActions.addExpense(expenseDetails));
-      dispatch(fetchExpenseList());
+      setTimeout(() => dispatch(fetchExpenseList()), 500);
       // ctx.addExpense(expenseDetails);
     }
     e.target.reset();
   };
 
   const deleteHandler = (id) => {
-    dispatch(expenseActions.deleteExpense(id))
-    dispatch(fetchExpenseList())
-  }
+    dispatch(expenseActions.deleteExpense(id));
+    setTimeout(() => dispatch(fetchExpenseList()), 500);
+  };
 
-  useEffect(()=>{
-    dispatch(fetchExpenseList())
-},[deleteHandler,submitHandler]);
+  useEffect(() => {
+    dispatch(fetchExpenseList());
+  }, []);
 
+  const premiumHandler = () => {
+    dispatch(premiumActions.activatePremium());
+    setSmShow(false)
+  };
 
   return (
     <div>
@@ -100,20 +108,24 @@ const Home = () => {
         ) : (
           ""
         )}
-        {smShow && <Modal
-        size="sm"
-        show={smShow}
-        // onHide={() => setSmShow(false)}
-        
-      >
-        <Modal.Header >
-          <Modal.Title id="example-modal-sizes-title-sm">
-             Premium Subscription
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Please Activate Premium Subscription</Modal.Body>
-        <ModalFooter><Button>Activate</Button><Button onClick={()=>setSmShow(false)}>Cancle</Button></ModalFooter>
-      </Modal>}
+        {smShow && (
+          <Modal
+            size="sm"
+            show={smShow}
+            // onHide={() => setSmShow(false)}
+          >
+            <Modal.Header>
+              <Modal.Title id="example-modal-sizes-title-sm">
+                Premium Subscription
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Please Activate Premium Subscription</Modal.Body>
+            <ModalFooter>
+              <Button onClick={premiumHandler}>Activate</Button>
+              <Button onClick={() => setSmShow(false)}>Cancle</Button>
+            </ModalFooter>
+          </Modal>
+        )}
       </div>
       {loginStatus && (
         <div
@@ -124,7 +136,17 @@ const Home = () => {
           }}
         >
           <Container style={{ width: "40%" }}>
-            <Card>
+            <Card
+              style={
+                darkMode
+                  ? { background: "rgb(30,30,30)", color: "rgb(226,226,226)" }
+                  : {
+                      background: "rgb(238,174,202)",
+                      background:
+                        "radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)",
+                    }
+              }
+            >
               <CardHeader
                 style={{
                   display: "flex",
@@ -137,7 +159,11 @@ const Home = () => {
               <CardBody>
                 <Form onSubmit={submitHandler}>
                   <Form.Group className="mb-3" controlId="formGroupEmail">
-                    <Form.Label>Price of the expense</Form.Label>
+                    <Form.Label
+                      style={darkMode ? { color: "rgb(149,149,149)" } : {}}
+                    >
+                      Price of the expense
+                    </Form.Label>
                     <InputGroup className="mb-3">
                       <InputGroup.Text>₹</InputGroup.Text>
                       <Form.Control
@@ -151,7 +177,11 @@ const Home = () => {
                       />
                       <InputGroup.Text>.00</InputGroup.Text>
                     </InputGroup>
-                    <Form.Label>Description of the expense</Form.Label>
+                    <Form.Label
+                      style={darkMode ? { color: "rgb(149,149,149)" } : {}}
+                    >
+                      Description of the expense
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       placeholder="Description"
@@ -180,7 +210,20 @@ const Home = () => {
                       <option value="Shopping">Shopping</option>
                     </Form.Select>
                   </Form.Group>
-                  <Button variant="primary" size="lg" type="submit">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    type="submit"
+                    style={
+                      darkMode
+                        ? {
+                            background: "rgb(187,134,252)",
+                            color: "black",
+                            border: "none",
+                          }
+                        : {}
+                    }
+                  >
                     {!edit ? "Add Expense" : "Update Expense"}
                   </Button>
                 </Form>
@@ -188,14 +231,36 @@ const Home = () => {
             </Card>
           </Container>
           <Container style={{ width: "60%", alignSelf: "self-start" }}>
-            <Card>
+            <Card
+              style={
+                darkMode
+                  ? { background: "rgb(30,30,30)", color: "rgb(226,226,226)" }
+                  : {
+                      background: "rgb(238,174,202)",
+                      background:
+                        "radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%)",
+                    }
+              }
+            >
               <CardHeader>
                 <h3>Expense List</h3>
               </CardHeader>
               <CardBody style={{ height: "279px", overflow: "auto" }}>
                 <ListGroup>
                   {expenseList?.map((expense, i) => (
-                    <ListGroup.Item key={i + 1}>
+                    <ListGroup.Item
+                      key={i + 1}
+                      style={
+                        darkMode
+                          ? {
+                              background: "rgb(187,134,252)",
+                              color: "black",
+                              fontSize: "20px",
+                              margin: "1px",
+                            }
+                          : { backgroundColor: "#EE82EE", margin: "1px" }
+                      }
+                    >
                       <Row>
                         <Col>{i + 1}.</Col>
                         <Col>₹ {expense.Price}</Col>
@@ -214,7 +279,7 @@ const Home = () => {
                           <Button
                             variant="outline-danger"
                             size="sm"
-                            onClick={()=>deleteHandler(expense.id)}
+                            onClick={() => deleteHandler(expense.id)}
                           >
                             <MdDelete />
                           </Button>
@@ -225,7 +290,7 @@ const Home = () => {
                 </ListGroup>
               </CardBody>
               <CardFooter>
-                <h5>Total Amount: ₹{total.toFixed(2)}</h5>
+                <h5>Total Amount: ₹{total}</h5>
               </CardFooter>
             </Card>
           </Container>

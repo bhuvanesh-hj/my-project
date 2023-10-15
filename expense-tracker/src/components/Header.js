@@ -4,14 +4,20 @@ import { NavLink, useHistory } from "react-router-dom";
 // import Context from "../context/ContextProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../store/AuthReducers";
-import { fetchExpenseList } from "../store/ExpenseReducers";
+import { premiumActions } from "../store/PremiumReducers";
+import Toggle from "./Toggle";
+import { FiDownload } from "react-icons/fi";
+import { CSVLink } from "react-csv";
 
 const Header = () => {
   const dispatch = useDispatch();
 
   const idToken = useSelector((state) => state.auth.idToken);
   const emailVerified = useSelector((state) => state.auth.emailVerified);
-  const loginStatus = useSelector(state=>state.auth.loginStatus)
+  const loginStatus = useSelector((state) => state.auth.loginStatus);
+  const premium = useSelector((state) => state.premium.isSubscribed);
+  const darkMode = useSelector((state) => state.premium.darkMode);
+  const expenseList = useSelector((state) => state.expense.ExpenseList);
 
   // const ctx = useContext(Context);
   const history = useHistory();
@@ -35,7 +41,7 @@ const Header = () => {
         if (res.ok) {
           res.json().then((data) => {
             alert("Otp sent to your email! please check it out");
-            dispatch(authActions.verifyEmail(data.email))
+            dispatch(authActions.verifyEmail(data.email));
             // ctx.verifyEmail(data.email);
             history.replace("/profile");
           });
@@ -48,12 +54,41 @@ const Header = () => {
 
   const logOutHandlerNav = () => {
     // ctx.logOut();
-    dispatch(authActions.logout())
+    dispatch(authActions.logout());
+    dispatch(premiumActions.logoutPremium());
     history.replace("/login");
   };
 
+  // function makeCsv(list) {
+  //   return list.map((r) => <li>Price=${r.Price} Description=${r.Description} Category=${r.Category}</li>);
+  // }
+
+  // const blob1 = new Blob([makeCsv(expenseList)]);
+
+  const headers = [
+    { label: "Price", key: "Price" },
+    { label: "Description", key: "Description" },
+    { label: "Category", key: "Category" },
+  ];
+
+  // const csvLink = {
+  //   filename:"ExpenseList",
+  //   headers:headers,
+  //   data:expenseList
+  // }
+  console.log(expenseList);
   return (
-    <Navbar variant="dark" bg="primary">
+    <Navbar
+      style={
+        darkMode
+          ? { background: "rgb(32,32,32)" }
+          : {
+              background: "rgb(2,0,36)",
+              background:
+                "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)",
+            }
+      }
+    >
       <Container>
         <NavbarBrand>
           <NavLink
@@ -62,8 +97,33 @@ const Header = () => {
           >
             My Expense Tracker
           </NavLink>
+          {premium && (
+            // <a
+            //   href={URL.createObjectURL(blob1)}
+            //   style={{
+            //     color: "white",
+            //     fontSize: "15px",
+            //     margin: "0 40px",
+            //   }}
+            //   download="expenselist.csv"
+            // >
+            //   Download List <FiDownload />
+            // </a>
+            <CSVLink
+              data={expenseList}
+              headers={headers}
+              style={{
+                color: "white",
+                fontSize: "15px",
+                margin: "0 40px",
+              }}
+            >
+              Download List <FiDownload />
+            </CSVLink>
+          )}
         </NavbarBrand>
         <Nav className="mb-lg-0">
+          {premium && <Toggle />}
           <NavLink
             to="/home"
             style={{
