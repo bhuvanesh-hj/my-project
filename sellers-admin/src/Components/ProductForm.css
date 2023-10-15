@@ -1,0 +1,120 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    margin: auto;
+    margin-top: 10px;
+    padding: 20px;
+    width: fit-content;
+    border-radius: 10px;
+    background-color: bisque;
+    margin-bottom: 20px;
+}
+
+form input{
+    width: 300px;
+    height: 25px;
+}
+form button{
+    font-size: medium;
+    padding: 10px 10px;
+    background-color: grey;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: azure;
+}
+.productList{
+    margin: auto;
+    padding: 5px 20px;
+    width: 337px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(162, 113, 226);
+    margin-top: 15px;
+}
+.list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin: auto;
+}
+
+li{
+    font-size: medium;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    gap: 100px;
+    align-items: center;
+    margin-top: 2px;
+    border: 1px solid #888;
+    width: 337px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    background-color:olivedrab;
+}
+li button{
+    background-color: red;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+h4{
+    border: 1px solid #888;
+    
+    top: 290px;
+    background-color: cadetblue;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px ;
+    width: 337px;
+    border-radius: 3px;
+    height: 30px;
+}
+.main{
+    border: 1px solid #888;
+    padding: 10px 5px;
+    background-color: #666;
+    border-radius: 5px;
+    display: flex;
+    /* align-items:flex-start; */
+    justify-content: space-between;
+    margin: 10px 250px;
+    position: relative;
+}
+.second{
+    margin-right: 25px;
+}
+.first{
+    margin-left: 25px;
+}
+.select{
+    width: 300px;
+    height: 25px;
+    margin-bottom: 15px;
+}
+
+h5{
+    background-color: aliceblue;
+    /* padding: auto; */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: medium;
+    margin: 2px 0px;
+    text-align: center;
+}

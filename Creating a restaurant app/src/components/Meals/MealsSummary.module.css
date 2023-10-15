@@ -1,0 +1,23 @@
+.summary {
+  text-align: center;
+  max-width: 45rem;
+  width: 90%;
+  margin: auto;
+  margin-top: -10rem;
+  position: relative;
+  background-color: #a1f6ff;
+  color: #fff;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 1px 18px 10px rgba(0, 0, 0, 0.25);
+  background-image:url(https://images.unsplash.com/photo-1611599537845-1c7aca0091c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fG1lYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60);
+  background-size: cover;
+  background-position: center;
+}
+
+.summary h2 {
+  font-size: 2rem;
+  margin-top: 0;
+  font-weight: bolder;
+  margin-bottom: 2px;
+}
