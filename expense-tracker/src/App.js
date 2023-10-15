@@ -7,9 +7,11 @@ import Login from "./components/Login";
 import { useContext } from "react";
 import Context from "./context/ContextProvider";
 import Profile from "./components/Profile";
+import { useSelector } from "react-redux"
 
 function App() {
-  const ctx = useContext(Context);
+  const loginStatus = useSelector(state=>state.auth.loginStatus)
+  // const ctx = useContext(Context);
   return (
     <div className="App" style={{backgroundColor:"rgb(13,17,23)",height:"100vh"}}>
       <Header />
@@ -17,8 +19,8 @@ function App() {
         <Switch>
           <Route exact path="/home" component={Home} />
           <Route exact path="/login" component={Login} />
-          {ctx.loginStatus ? (
-            <Route eact path="/profile" component={Profile} />
+          {loginStatus ? (
+            loginStatus &&<Route eact path="/profile" component={Profile} />
           ) : (
             <Redirect to="/login" />
           )}

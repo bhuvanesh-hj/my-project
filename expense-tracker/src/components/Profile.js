@@ -11,9 +11,14 @@ import { HiOutlineLink } from "react-icons/hi";
 import { TiTick } from "react-icons/ti";
 import Context from "../context/ContextProvider";
 import { useHistory } from "react-router-dom"
+import { useSelector } from "react-redux"
+
 
 const Profile = () => {
-  const ctx = useContext(Context);
+  const idToken = useSelector(state=>state.auth.idToken)
+  const email = useSelector(state=>state.auth.email)
+  const emailVerified = useSelector(state=>state.auth.emailVerified)
+  // const ctx = useContext(Context);
   const history = useHistory()
   const [details, setDetails] = useState({
     fullName: "",
@@ -34,7 +39,7 @@ const Profile = () => {
       {
         method: "POST",
         body: JSON.stringify({
-          idToken: ctx.idToken,
+          idToken: idToken,
           displayName: details.fullName,
           photoUrl: details.photoUrl,
           returnSecureToken: true,
@@ -61,7 +66,7 @@ const Profile = () => {
       {
         method: "POST",
         body: JSON.stringify({
-          idToken: ctx.idToken,
+          idToken: idToken,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +109,7 @@ const Profile = () => {
           padding: "30px",
         }}
       >
-          {ctx.emailVerified && <i style={{color:"green"}}>{ctx.email} is varifyed<TiTick style={{color:"green"}}/></i>}
+          {emailVerified && <i style={{color:"green"}}>{email} is varifyed<TiTick style={{color:"green"}}/></i>}
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h5>Contact details </h5>
           <Button size="sm" variant="outline-danger" onClick={()=>history.replace("/home")}>

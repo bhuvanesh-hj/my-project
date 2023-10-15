@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Context from "../context/ContextProvider";
 import {
@@ -10,20 +10,30 @@ import {
   Row,
   Col,
   CardFooter,
+  ModalFooter,
 } from "react-bootstrap";
+import Modal from 'react-bootstrap/Modal';
 import { Form } from "react-bootstrap";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import { MdModeEditOutline, MdDelete } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseActions, fetchExpenseList } from "../store/ExpenseReducers";
 
 const Home = () => {
-  const ctx = useContext(Context);
+  const dispatch = useDispatch();
+  const loginStatus = useSelector((state) => state.auth.loginStatus);
+  const emailVerified = useSelector((state) => state.auth.emailVerified);
+  const expenseList = useSelector((state) => state.expense.ExpenseList);
+
+  // const ctx = useContext(Context);
   const [expenseDetails, setExpenseDetails] = useState({});
+  const [smShow, setSmShow] = useState(false);
   const [edit, setEdit] = useState();
 
-  const total = ctx.expenseList.reduce((acc, curr) => {
-    return acc+ +curr.Price;
+  const total = expenseList.reduce((acc, curr) => {
+    return acc + +curr.Price;
   }, 0);
 
   const chnageHnadler = (e) => {
@@ -46,14 +56,32 @@ const Home = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    if(total=>1000){
+      setSmShow(true)
+      return
+    }
     if (edit) {
-      ctx.editExpense(edit);
+      dispatch(expenseActions.editExpense(edit));
+      dispatch(fetchExpenseList());
+      // ctx.editExpense(edit);
       setEdit(null);
     } else {
-      ctx.addExpense(expenseDetails);
+      dispatch(expenseActions.addExpense(expenseDetails));
+      dispatch(fetchExpenseList());
+      // ctx.addExpense(expenseDetails);
     }
     e.target.reset();
   };
+
+  const deleteHandler = (id) => {
+    dispatch(expenseActions.deleteExpense(id))
+    dispatch(fetchExpenseList())
+  }
+
+  useEffect(()=>{
+    dispatch(fetchExpenseList())
+},[deleteHandler,submitHandler]);
+
 
   return (
     <div>
@@ -65,15 +93,29 @@ const Home = () => {
         }}
       >
         <div style={{ color: "white" }}>"Welcome to Expense Tracker!"</div>
-        {ctx.loginStatus && !ctx.emailVerified ? (
+        {loginStatus && !emailVerified ? (
           <div style={{ color: "white" }}>
             Your profile Incomplete.<Link to="/profile">Complete now!</Link>
           </div>
         ) : (
           ""
         )}
+        {smShow && <Modal
+        size="sm"
+        show={smShow}
+        // onHide={() => setSmShow(false)}
+        
+      >
+        <Modal.Header >
+          <Modal.Title id="example-modal-sizes-title-sm">
+             Premium Subscription
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Please Activate Premium Subscription</Modal.Body>
+        <ModalFooter><Button>Activate</Button><Button onClick={()=>setSmShow(false)}>Cancle</Button></ModalFooter>
+      </Modal>}
       </div>
-      {ctx.loginStatus && (
+      {loginStatus && (
         <div
           style={{
             display: "flex",
@@ -152,7 +194,7 @@ const Home = () => {
               </CardHeader>
               <CardBody style={{ height: "279px", overflow: "auto" }}>
                 <ListGroup>
-                  {ctx.expenseList.map((expense, i) => (
+                  {expenseList?.map((expense, i) => (
                     <ListGroup.Item key={i + 1}>
                       <Row>
                         <Col>{i + 1}.</Col>
@@ -172,7 +214,7 @@ const Home = () => {
                           <Button
                             variant="outline-danger"
                             size="sm"
-                            onClick={() => ctx.deleteExpense(expense.id)}
+                            onClick={()=>deleteHandler(expense.id)}
                           >
                             <MdDelete />
                           </Button>

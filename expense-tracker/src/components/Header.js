@@ -1,10 +1,19 @@
 import React, { useContext } from "react";
 import { Navbar, Container, NavbarBrand, Nav, Button } from "react-bootstrap";
 import { NavLink, useHistory } from "react-router-dom";
-import Context from "../context/ContextProvider";
+// import Context from "../context/ContextProvider";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "../store/AuthReducers";
+import { fetchExpenseList } from "../store/ExpenseReducers";
 
 const Header = () => {
-  const ctx = useContext(Context);
+  const dispatch = useDispatch();
+
+  const idToken = useSelector((state) => state.auth.idToken);
+  const emailVerified = useSelector((state) => state.auth.emailVerified);
+  const loginStatus = useSelector(state=>state.auth.loginStatus)
+
+  // const ctx = useContext(Context);
   const history = useHistory();
 
   const verifyEmailHandler = () => {
@@ -14,7 +23,8 @@ const Header = () => {
         method: "POST",
         body: JSON.stringify({
           requestType: "VERIFY_EMAIL",
-          idToken: ctx.idToken,
+          // idToken: ctx.idToken,
+          idToken: idToken,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +35,8 @@ const Header = () => {
         if (res.ok) {
           res.json().then((data) => {
             alert("Otp sent to your email! please check it out");
-            ctx.verifyEmail(data.email);
+            dispatch(authActions.verifyEmail(data.email))
+            // ctx.verifyEmail(data.email);
             history.replace("/profile");
           });
         } else {
@@ -36,7 +47,8 @@ const Header = () => {
   };
 
   const logOutHandlerNav = () => {
-    ctx.logOut();
+    // ctx.logOut();
+    dispatch(authActions.logout())
     history.replace("/login");
   };
 
@@ -82,7 +94,7 @@ const Header = () => {
           >
             About
           </NavLink>
-          {ctx.loginStatus && !ctx.emailVerified ? (
+          {loginStatus && !emailVerified ? (
             <NavLink
               to="/profile"
               onClick={verifyEmailHandler}
@@ -98,8 +110,14 @@ const Header = () => {
             ""
           )}
 
-          {ctx.loginStatus ? (
-            <Button onClick={logOutHandlerNav} size="sm" variant="outline-danger">LogOut</Button>
+          {loginStatus ? (
+            <Button
+              onClick={logOutHandlerNav}
+              size="sm"
+              variant="outline-danger"
+            >
+              LogOut
+            </Button>
           ) : (
             <NavLink
               to="/login"
@@ -109,7 +127,9 @@ const Header = () => {
                 marginRight: "10px",
               }}
             >
-              <Button onClick={logOutHandlerNav} size="sm" variant="success">Log In</Button>
+              <Button size="sm" variant="success">
+                Log In
+              </Button>
             </NavLink>
           )}
         </Nav>

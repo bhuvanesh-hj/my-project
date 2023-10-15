@@ -5,13 +5,17 @@ import {
   FormControl,
   FormLabel,
   Alert,
-  Col,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import Context from "../context/ContextProvider";
+import { useDispatch} from "react-redux"
+import { authActions } from "../store/AuthReducers";
+import { fetchExpenseList } from "../store/ExpenseReducers";
 
 const Login = () => {
-  const ctx = useContext(Context);
+const dispatch = useDispatch()
+
+  // const ctx = useContext(Context);
   const [login, setLogin] = useState(true);
   const [forgot, setForgot] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -39,7 +43,7 @@ const Login = () => {
           method: "POST",
           body: JSON.stringify({
             requestType: "PASSWORD_RESET",
-            email: ctx.email,
+            email: form.email,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -86,7 +90,8 @@ const Login = () => {
               res.json().then(async (data) => {
                 if (login) {
                   setLoading(false)
-                  ctx.logIn(data);
+                  dispatch(authActions.login(data.idToken))
+                  // ctx.logIn(data);
                   history.replace("/home");
                   e.target.reset();
                 } else {
