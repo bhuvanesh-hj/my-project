@@ -1,41 +1,37 @@
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
+import { counterActions } from "../store/store";
 
-import classes from './Counter.module.css';
-
+import classes from "./Counter.module.css";
 
 const Counter = () => {
-  const dispatch = useDispatch()
-  const counter = useSelector(state => state.counter)
+  const dispatch = useDispatch();
+  const counter = useSelector((state) => state.counter.counter);
+  const show = useSelector((state) => state.counter.showCounter);
 
-  const IncrementHandler = () => {
-    dispatch({type:"IncrementBy2"})
+  const incrementHandler = () => {
+    dispatch(counterActions.increment())
   }
 
-  const DecrementHandler = () => {
-    dispatch({type:"DecrementBy2"})
+  const decrementHandler = () => {
+    dispatch(counterActions.decrement())
   }
 
-  const IncrementBy5Handler = () => {
-    dispatch({type:"IncrementBy5"})
+  const increaseHandler = () => {
+    dispatch(counterActions.increase(10))
   }
 
-  const DecrementBy5Handler = () => {
-    dispatch({type:"DecrementBy5"})
-  }
-
-  const toggleCounterHandler = () => {};
+  const toggleCounterHandler = () => {
+    dispatch(counterActions.toggleCounter())
+  };
 
   return (
     <main className={classes.counter}>
       <h1>Redux Counter</h1>
-      <div className={classes.value}>{counter}</div>
+      {show && <div className={classes.value}>{counter}</div>}
       <div>
-        <button onClick={IncrementHandler}>Increment by 2</button>
-        <button onClick={DecrementHandler}>decrement by 2</button>
-      </div>
-      <div>
-        <button onClick={IncrementBy5Handler}>Increment by 5</button>
-        <button onClick={DecrementBy5Handler}>decrement by 5</button>
+        <button onClick={incrementHandler}>Increment</button>
+        <button onClick={decrementHandler}>Decrement</button>
+        <button onClick={increaseHandler}>Increase by 10</button>
       </div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
     </main>
