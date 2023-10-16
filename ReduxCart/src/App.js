@@ -5,7 +5,7 @@ import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 
 function App() {
-  const cartIsActive = useSelector((state) => state.cart.cartActive);
+  const cartIsActive = useSelector((state) => state.ui.cartVisible);
   return (
     <Layout>
       {cartIsActive && <Cart />}
