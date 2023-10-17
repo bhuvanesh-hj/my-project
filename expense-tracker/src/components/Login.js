@@ -183,7 +183,7 @@ const dispatch = useDispatch()
       {!forgot && <Alert variant="success">
         <a
           href="#"
-          id="change"
+          name="change"
           onClick={() => setLogin(!login)}
           style={{
             cursor: "pointer",
