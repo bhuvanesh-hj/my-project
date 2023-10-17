@@ -2,7 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const subscribtion = localStorage.getItem("premium");
 
-const initialPremiumState = { isSubscribed: subscribtion?subscribtion:false, darkMode: false };
+const initialPremiumState = {
+  isSubscribed: subscribtion ? subscribtion : false,
+  darkMode: false,
+};
 
 const PremiumSlice = createSlice({
   name: "Premium",
@@ -15,9 +18,9 @@ const PremiumSlice = createSlice({
     darkMode(state) {
       state.darkMode = !state.darkMode;
     },
-    logoutPremium(state){
-      state.isSubscribed = false
-    }
+    logoutPremium(state) {
+      state.isSubscribed = false;
+    },
   },
 });
 

@@ -1,11 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Context from "../context/ContextProvider";
+
 import {
   Card,
   CardBody,
   CardHeader,
-  CardTitle,
   Container,
   Row,
   Col,
@@ -19,7 +18,7 @@ import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import { MdModeEditOutline, MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { expenseActions, fetchExpenseList } from "../store/ExpenseReducers";
+import { expenseActions } from "../store/ExpenseReducers";
 import { premiumActions } from "../store/PremiumReducers";
 
 const Home = () => {
@@ -65,26 +64,20 @@ const Home = () => {
       return;
     }}
     if (edit) {
-      dispatch(expenseActions.editExpense(edit));
-      setTimeout(() => dispatch(fetchExpenseList()), 500);
+      dispatch(expenseActions.addExpense(edit));
       // ctx.editExpense(edit);
       setEdit(null);
     } else {
       dispatch(expenseActions.addExpense(expenseDetails));
-      setTimeout(() => dispatch(fetchExpenseList()), 500);
+      
       // ctx.addExpense(expenseDetails);
     }
     e.target.reset();
   };
 
-  const deleteHandler = (id) => {
-    dispatch(expenseActions.deleteExpense(id));
-    setTimeout(() => dispatch(fetchExpenseList()), 500);
+  const deleteHandler = (expense) => {
+    dispatch(expenseActions.deleteExpense(expense));
   };
-
-  useEffect(() => {
-    dispatch(fetchExpenseList());
-  }, []);
 
   const premiumHandler = () => {
     dispatch(premiumActions.activatePremium());
@@ -249,7 +242,7 @@ const Home = () => {
                 <ListGroup>
                   {expenseList?.map((expense, i) => (
                     <ListGroup.Item
-                      key={i + 1}
+                      key={expense.id}
                       style={
                         darkMode
                           ? {
@@ -279,7 +272,7 @@ const Home = () => {
                           <Button
                             variant="outline-danger"
                             size="sm"
-                            onClick={() => deleteHandler(expense.id)}
+                            onClick={() => deleteHandler(expense)}
                           >
                             <MdDelete />
                           </Button>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Navbar, Container, NavbarBrand, Nav, Button } from "react-bootstrap";
 import { NavLink, useHistory } from "react-router-dom";
 // import Context from "../context/ContextProvider";
@@ -7,10 +7,14 @@ import { authActions } from "../store/AuthReducers";
 import { premiumActions } from "../store/PremiumReducers";
 import Toggle from "./Toggle";
 import { FiDownload } from "react-icons/fi";
+import { LiaHomeSolid } from "react-icons/lia";
+import { BsInfoCircle } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
 import { CSVLink } from "react-csv";
 
 const Header = () => {
-  const dispatch = useDispatch();
+  
+  const dispatch = useDispatch()
 
   const idToken = useSelector((state) => state.auth.idToken);
   const emailVerified = useSelector((state) => state.auth.emailVerified);
@@ -59,10 +63,6 @@ const Header = () => {
     history.replace("/login");
   };
 
-  // function makeCsv(list) {
-  //   return list.map((r) => <li>Price=${r.Price} Description=${r.Description} Category=${r.Category}</li>);
-  // }
-
   // const blob1 = new Blob([makeCsv(expenseList)]);
 
   const headers = [
@@ -71,12 +71,6 @@ const Header = () => {
     { label: "Category", key: "Category" },
   ];
 
-  // const csvLink = {
-  //   filename:"ExpenseList",
-  //   headers:headers,
-  //   data:expenseList
-  // }
-  console.log(expenseList);
   return (
     <Navbar
       style={
@@ -98,17 +92,6 @@ const Header = () => {
             My Expense Tracker
           </NavLink>
           {premium && (
-            // <a
-            //   href={URL.createObjectURL(blob1)}
-            //   style={{
-            //     color: "white",
-            //     fontSize: "15px",
-            //     margin: "0 40px",
-            //   }}
-            //   download="expenselist.csv"
-            // >
-            //   Download List <FiDownload />
-            // </a>
             <CSVLink
               data={expenseList}
               headers={headers}
@@ -132,6 +115,7 @@ const Header = () => {
               marginRight: "10px",
             }}
           >
+            <LiaHomeSolid style={{ margin: "5px" }} />
             Home
           </NavLink>
           <NavLink
@@ -142,6 +126,7 @@ const Header = () => {
               marginRight: "10px",
             }}
           >
+            <CgProfile style={{ margin: "5px" }} />
             Profile
           </NavLink>
           <NavLink
@@ -152,6 +137,7 @@ const Header = () => {
               marginRight: "10px",
             }}
           >
+            <BsInfoCircle style={{ margin: "5px" }} />
             About
           </NavLink>
           {loginStatus && !emailVerified ? (
@@ -175,6 +161,7 @@ const Header = () => {
               onClick={logOutHandlerNav}
               size="sm"
               variant="outline-danger"
+              style={{ borderRadius: "10%" }}
             >
               LogOut
             </Button>
@@ -187,7 +174,11 @@ const Header = () => {
                 marginRight: "10px",
               }}
             >
-              <Button size="sm" variant="success">
+              <Button
+                size="sm"
+                variant="success"
+                style={{ borderRadius: "10%" }}
+              >
                 Log In
               </Button>
             </NavLink>

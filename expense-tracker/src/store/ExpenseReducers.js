@@ -1,84 +1,38 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-// export const fetchTodos = createAsyncThunk("fetchTodos", async () => {
-//     const res = await fetch(`https://jsonplaceholder.typicode.com/todos`);
-//     return res?.json();
-//  });
-
-export const fetchExpenseList = createAsyncThunk(
-  "fetchExpenseList",
-  async () => {
-    const response = await fetch(
-      `https://react-http-91704-default-rtdb.firebaseio.com/Expense.json`
-    );
-    const expenseMainList = await response.json();
-    let loadedList = [];
-    for (let key in expenseMainList) {
-      loadedList.push({
-        id: key,
-        Price: expenseMainList[key].Price,
-        Description: expenseMainList[key].Description,
-        Category: expenseMainList[key].Category,
-      });
-    }
-    return loadedList;
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
 
 const ExpenseSlice = createSlice({
   name: "Expense",
   initialState: {
-    isLoading: false,
     ExpenseList: [],
-    isError: false,
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchExpenseList.pending, (state, action) => {
-      state.isLoading = true;
-    });
-    builder.addCase(fetchExpenseList.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.ExpenseList = action.payload;
-    });
-    builder.addCase(fetchExpenseList.rejected, (state, action) => {
-      state.isError = true;
-    });
+    changed: false,
   },
   reducers: {
+    replaceList(state, action) {
+      state.ExpenseList = action.payload.expense;
+    },
     addExpense(state, action) {
-      fetch(
-        `https://react-http-91704-default-rtdb.firebaseio.com/Expense.json`,
-        {
-          method: "POST",
-          body: JSON.stringify(action.payload),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      const newItem = action.payload;
+      const existItem = state.ExpenseList.find(
+        (item) => item.id === newItem.id
       );
+      state.changed = true;
+      if (!existItem) {
+        state.ExpenseList.push({
+          ...newItem,
+          id: Math.floor(Math.random() * 100 + 1),
+        });
+      } else {
+        existItem.Price = newItem.Price;
+        existItem.Description = newItem.Description;
+        existItem.Category = newItem.Category;
+      }
     },
     deleteExpense(state, action) {
-      fetch(
-        `https://react-http-91704-default-rtdb.firebaseio.com/Expense/${action.payload}.json`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    },
-    editExpense(state, action) {
-      fetch(
-        `https://react-http-91704-default-rtdb.firebaseio.com/Expense/${action.payload.id}.json`,
-        {
-          method: "PUT",
-          body: JSON.stringify(action.payload),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const newItem = action.payload;
+      const existItem = state.ExpenseList.find(
+        (item) => item.id === newItem.id)
+      state.changed = true;
+      state.ExpenseList = state.ExpenseList.filter((item) => item !== existItem);
     },
   },
 });

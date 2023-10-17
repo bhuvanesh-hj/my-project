@@ -4,15 +4,30 @@ import Fotter from "./components/Fotter";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import { useContext } from "react";
-import Context from "./context/ContextProvider";
+import { useEffect } from "react";
 import Profile from "./components/Profile";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { sendData, fetchData } from "./store/ExpenseActions";
+
+let initial = true;
 
 function App() {
+  const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
   const darkMode = useSelector((state) => state.premium.darkMode);
+  const ExpenseList = useSelector((state) => state.expense.ExpenseList);
   // const ctx = useContext(Context);
+
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
+  useEffect(() => {
+    if (initial) {
+      initial = false;
+      return;
+    }
+    dispatch(sendData(ExpenseList));
+  }, [ExpenseList, dispatch]);
   return (
     <div
       className="App"
