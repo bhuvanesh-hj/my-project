@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import "./Authentication.css";
 import { GrClose } from "react-icons/gr";
@@ -7,8 +8,10 @@ import { BiLockAlt } from "react-icons/bi";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 
 const Authentication = () => {
+  const history = useHistory();
   const [login, setLogin] = useState(false);
   const [forgot, setForgot] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [values, setValues] = React.useState({
     email: "",
     password: "",
@@ -43,6 +46,7 @@ const Authentication = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    setLoading(true);
     if (forgot) {
       fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyClkgrmSBh9jRlBzGcgjl8AylcyIuya_vk",
@@ -61,6 +65,7 @@ const Authentication = () => {
           if (res.ok) {
             alert("Sucessfully sent pasword change link to your email");
             setForgot(!forgot);
+            setLoading(false);
             return;
           } else {
             throw new Error("Failed to send request");
@@ -68,6 +73,7 @@ const Authentication = () => {
         })
         .catch((error) => {
           alert(error.message);
+          setLoading(false);
         });
     } else {
       let URL = "";
@@ -92,20 +98,33 @@ const Authentication = () => {
         })
           .then((res) => {
             if (res.ok) {
-              if (login) {
-              } else {
-                console.log("User sucessfully signedup");
-                setLogin(true);
-              }
+              res.json().then((data) => {
+                if (login) {
+                  localStorage.setItem("idToken", data.idToken);
+                  history.replace("/home");
+                  setLoading(false);
+                  event.target.reset();
+                  values.password = "";
+                } else {
+                  console.log("User sucessfully signedup");
+                  setLogin(true);
+                  setLoading(false);
+                  event.target.reset();
+                  values.password = "";
+                  values.confirmPassword = "";
+                }
+              });
             } else {
               throw new Error("Authentication failed!");
             }
           })
           .catch((error) => {
             alert(error.message);
+            setLoading(false);
           });
       } else {
         alert("Password did not match");
+        setLoading(false);
         return;
       }
     }
@@ -199,7 +218,13 @@ const Authentication = () => {
             </div>
           )}
           <button type="submit" className="button">
-            {login ? (forgot ? "Send Link" : "Login Now") : "Sign up"}
+            {loading
+              ? "Loading..."
+              : login
+              ? forgot
+                ? "Send Link"
+                : "Login Now"
+              : "Sign up"}
           </button>
           {forgot && (
             <div className="login_sigup">
