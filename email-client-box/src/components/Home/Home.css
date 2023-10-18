@@ -2,28 +2,26 @@
   background-color: #7859f9;
 }
 
-/* // Search  */
-
-
-/* Utilities  */
 .font-weight {
   font-weight: 500;
 }
 
 .menu {
-  background-color: #f4f4f7;
+  background-color: #5353d7;
 }
 .menubar {
-  font-size: 12px;
+  font-size: 30px;
 }
 .compose {
   width: 100%;
-  background-color: #188fff;
-  border-radius: 3px;
-  padding: 10px 0px;
+  background-color: rgb(233,30,99);
+  border-radius: 13px;
+  padding: 13px 0px;
   border: none;
 }
-
+.compose:active{
+  transform: scale(0.95);
+}
 
 /* // Menul List  */
 .inbox-list {
@@ -35,7 +33,6 @@
 }
 .menu-list li {
   list-style: none;
-
   padding: 10px 0px 10px 4px;
   color: #333;
   cursor: pointer;
@@ -49,33 +46,6 @@
   display: inline-block;
   cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
-/* .active-accordian, .accordion:hover {
-  background-color: #ccc; 
-} */
-.accor-button {
-  border-radius: 3px !important;
-  padding: 10px 0px 10px 4px;
-  width: 100%;
-  text-align: left;
-  border: none;
-  background-color: #b6d4fb;
-}
-.panel {
-  width: 100%;
-  display: none;
-  overflow: hidden;
-}
-
-
 
 .list-active {
   background-color: #b6d4fb;
@@ -102,11 +72,10 @@
   height: 10px;
 }
 
-.menu-disp{
+.menu-disp {
   height: 470px;
   margin: 0 5px;
 }
-
 
 .message-container {
   padding: 0.75px 2rem;
@@ -121,7 +90,7 @@
 }
 .description-mail-list {
   display: inline-block;
-  width: 150px; /* Adjust the width as needed */
+  width: 200px; /* Adjust the width as needed */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -143,18 +112,9 @@
   .font-reducer {
     overflow-x: scroll;
   }
-  .search-cantrol {
-    display: none;
-  }
   .description-mail-list {
     display: none;
   }
-  .bullet,
-  .star,
-  .starred {
-    display: none;
-  }
-
   .menu {
     position: absolute;
     top: 0px;
@@ -169,12 +129,13 @@
   }
 }
 .sent-mail-count,
-.delete-mail-count,
 .inbox-mail-count {
   padding-left: 10px;
   border-radius: 5px;
   color: rgb(226, 136, 136);
 }
-
-
-
+.inbox-unread-count{
+  padding-left: 10px;
+  border-radius: 5px;
+  color: rgb(4, 247, 45);
+}

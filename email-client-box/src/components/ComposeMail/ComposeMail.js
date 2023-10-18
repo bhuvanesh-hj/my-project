@@ -40,9 +40,8 @@ const ComposeMail = (props) => {
       reciver: reciver.current.value,
       subject: subject.current.value,
       mail: plainText,
-      time: props.time,
-      send: true,
-      receive: false,
+      read:false,
+      time: props.time
     };
     fetch(
       "https://react-http-91704-default-rtdb.firebaseio.com/mailClient.json",
@@ -93,14 +92,6 @@ const ComposeMail = (props) => {
             className="w90"
             ref={reciver}
           />
-          <span className="d-flex flex-row">
-            <a href="#cc" className="ms-2">
-              CC
-            </a>{" "}
-            <a href="#BCC" className="ms-2">
-              BCC
-            </a>
-          </span>
         </div>
         <div className="d-flex align-items-center justify-content-between w-100  ps-3 pe-3 pt-2 pb-2  font-weight border-bottom">
           <input

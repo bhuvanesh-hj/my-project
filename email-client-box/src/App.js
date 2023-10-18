@@ -1,4 +1,4 @@
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -7,6 +7,7 @@ import Authentication from "./components/Authentication/Authentication";
 import Header from "./components/Header/Header";
 import Home from "./components/Home/Home";
 import { mailAction } from "../src/store/MailSlice";
+
 
 function App() {
   const loginStatus = useSelector((state) => state.auth.loginStatus);
@@ -31,7 +32,6 @@ function App() {
                 mailId,
                 ...mailData[mailId],
               };
-              console.log(temp)
               if (
                 temp.sender === localStorage.getItem("email") ||
                 temp.reciver === localStorage.getItem("email")
@@ -42,6 +42,7 @@ function App() {
           }
         })
         .catch((error) => {
+          alert(error.message)
           console.log(error);
         });
       return;
@@ -52,9 +53,9 @@ function App() {
         <Header />
       <section className="home">
         <Switch>
-          <Route exact path="/home">
+          {loginStatus && <Route exact path="/home">
             <Home/>
-          </Route>
+          </Route>}
           {!loginStatus && (
             <Route exact path="/auth">
               <Authentication />

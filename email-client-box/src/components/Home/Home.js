@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
 import { FcUpLeft } from "react-icons/fc";
+import { BiPencil } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
+import { GoDotFill } from "react-icons/go";
 import ComposeMail from "../ComposeMail/ComposeMail";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { mailAction } from "../../store/MailSlice";
 
 const Home = () => {
-  // const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeListItem, setActiveListItem] = useState("Inbox");
   const [iscompose, setCompose] = useState(false);
   const [readmoode, setReadMode] = useState(false);
@@ -15,13 +16,16 @@ const Home = () => {
   const currentDate = new Date();
   const sentMails = useSelector((state) => state.mail.sentMails);
   const allMails = useSelector((state) => state.mail.allMails);
+  const unread = useSelector((state) => state.mail.unreadMails);
   const [temp, setTemp] = useState([]);
   useEffect(() => {
     setTemp(allMails);
   }, [allMails]);
+
   const composehandle = (value) => {
     setCompose(value);
   };
+  const dispatch = useDispatch();
   // Function to format the time (hh:mm AM/PM)
   const formatTime = (date) => {
     const hours = date.getHours();
@@ -60,17 +64,18 @@ const Home = () => {
     }
   };
 
- 
+  //  reading window handler
   const readmodeHandler = () => {
     setReadMode(false);
   };
+
   const readModeActivehandler = (value) => {
     setReadMode(true);
     setReadModeValue(value);
-    let temp = {value};
+    let temp = { ...value, read: true, unread: false };
     if (value.sender !== localStorage.getItem("email")) {
       fetch(
-        `https://react-http-91704-default-rtdb.firebaseio.com/mailClient.json/${value.mailId}.json`,
+        `https://react-http-91704-default-rtdb.firebaseio.com/mailClient/${value.mailId}.json`,
         {
           method: "PUT",
           header: {
@@ -89,6 +94,7 @@ const Home = () => {
           console.log(data);
         })
         .catch((error) => {
+          alert(error.message);
           console.log(error);
         });
     }
@@ -112,19 +118,20 @@ const Home = () => {
       });
     setReadMode(false);
     setTemp([]);
+    // dispatch(mailAction.removeMail(value));
   };
   return (
     <div>
       <div className="container-fluid mail-main">
         <div className="row">
-          <section className="menu-disp menu col-lg-2  col-md-12 p-3 rad">
+          <section className="menu-disp menu col-lg-2 col-md-12 p-3 rad">
             <button
               className="compose font-weight text-light"
               onClick={() => {
                 composehandle(true);
               }}
             >
-              Compose mail
+              <BiPencil /> Compose mail
             </button>
             <div class="inbox-list">
               <ul className="menu-list font-weight mt-1">
@@ -134,6 +141,7 @@ const Home = () => {
                 >
                   Inbox{" "}
                   <span className="inbox-mail-count">{allMails.length}</span>
+                  <span className="inbox-unread-count">{unread.length}</span>
                 </li>
                 <li
                   className={activeListItem === "Sent" ? "list-active" : ""}
@@ -155,14 +163,19 @@ const Home = () => {
                   </div>
                 ) : (
                   <ul>
-                    {temp.map((value,i) => (
+                    {temp.map((value, i) => (
                       <li
                         className="font-weight d-flex align-items-center justify-content-between font-reducer"
                         onClick={() => {
                           readModeActivehandler(value);
                         }}
                       >
-                        <span>{i+1}</span>
+                        <span>{i + 1}</span>
+                        {!value.read && (
+                          <span className="bullet">
+                            <GoDotFill color="green" />
+                          </span>
+                        )}
                         <span>{value.name}</span>
                         <span className="title-mail-list">{value.subject}</span>
                         <span className="description-mail-list">
