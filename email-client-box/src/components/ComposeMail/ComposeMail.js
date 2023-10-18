@@ -1,15 +1,17 @@
 import React, { useRef, useState } from "react";
 import "./ComposeMail.css";
 import { Editor } from "react-draft-wysiwyg";
-import { ToastContainer, toast } from "react-toastify";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from "draft-js";
 import { RxCross1 } from "react-icons/rx";
 import { IoMdSend } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { mailAction } from "../../store/MailSlice";
 
 import "./ComposeMail.css";
 
 const ComposeMail = (props) => {
+  const dispatch = useDispatch()
   const reciver = useRef();
   const subject = useRef();
   const editor = useRef();
@@ -33,13 +35,11 @@ const ComposeMail = (props) => {
       .join("\n");
     let sender = localStorage.getItem("email");
     let mail = {
-      name: "Bhuvanesh hj",
+      name: sender.replace("@gmail.com",""),
       sender,
       reciver: reciver.current.value,
       subject: subject.current.value,
       mail: plainText,
-      read: false,
-      starred: false,
       time: props.time,
       send: true,
       receive: false,
@@ -58,13 +58,13 @@ const ComposeMail = (props) => {
       .then((data) => {
         // Handle success if needed
         console.log("Mail stored in Firebase:", data);
-        //   dispatch(mailAction.addMail(mail));
-        //  setTimeout(()=>{ props.composeHandler(false);},1000);
+          dispatch(mailAction.addMail(mail));
+         setTimeout(()=>{ props.composeHandler(false);},1000);
       })
       .catch((error) => {
         // Handle error if needed
         console.error("Error storing mail in Firebase:", error);
-        //   setTimeout(()=>{ props.composeHandler(false);},1000);
+          setTimeout(()=>{ props.composeHandler(false);},1000);
       });
     setEditorState("");
   };

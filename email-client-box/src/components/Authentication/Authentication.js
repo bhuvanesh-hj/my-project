@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import "./Authentication.css";
 import { GrClose } from "react-icons/gr";
 import { HiOutlineMail } from "react-icons/hi";
 import { BiLockAlt } from "react-icons/bi";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { authActions } from "../../store/AuthSlice";
 
 const Authentication = (props) => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const [login, setLogin] = useState(false);
   const [forgot, setForgot] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -100,9 +103,8 @@ const Authentication = (props) => {
             if (res.ok) {
               res.json().then((data) => {
                 if (login) {
-                  console.log("User sycessfully loged in")
-                  localStorage.setItem("idToken", data.idToken);
-                  localStorage.setItem("email", data.email);
+                  console.log("User sycessfully loged in");
+                  dispatch(authActions.login(data))
                   history.replace("/home");
                   setLoading(false);
                   event.target.reset();
@@ -133,7 +135,7 @@ const Authentication = (props) => {
   };
   return (
     <div className="form_container">
-      <GrClose className="form_close" onClick={()=>props.hide()} />
+      <GrClose className="form_close" />
       <div className="form login_form">
         <form onSubmit={submitHandler}>
           <h2>
