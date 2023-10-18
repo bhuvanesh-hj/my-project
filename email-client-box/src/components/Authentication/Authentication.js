@@ -7,7 +7,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import { BiLockAlt } from "react-icons/bi";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 
-const Authentication = () => {
+const Authentication = (props) => {
   const history = useHistory();
   const [login, setLogin] = useState(false);
   const [forgot, setForgot] = useState(false);
@@ -100,7 +100,9 @@ const Authentication = () => {
             if (res.ok) {
               res.json().then((data) => {
                 if (login) {
+                  console.log("User sycessfully loged in")
                   localStorage.setItem("idToken", data.idToken);
+                  localStorage.setItem("email", data.email);
                   history.replace("/home");
                   setLoading(false);
                   event.target.reset();
@@ -131,7 +133,7 @@ const Authentication = () => {
   };
   return (
     <div className="form_container">
-      <GrClose className="form_close" />
+      <GrClose className="form_close" onClick={()=>props.hide()} />
       <div className="form login_form">
         <form onSubmit={submitHandler}>
           <h2>

@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import Authentication from "./Authentication";
+import userEvent from "@testing-library/user-event";
 
-describe("Authentication part test", () => {
+describe("Authentication part test sigup", () => {
   test("Checking the sigup", () => {
     render(<Authentication />);
     expect(screen.getByText("Signup")).toBeInTheDocument();

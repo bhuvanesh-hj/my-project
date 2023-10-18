@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import "./Header.css";
 
-const Header = () => {
+const Header = ({show}) => {
   return (
     <header className="header">
       <nav className="nav">
@@ -28,7 +28,7 @@ const Header = () => {
         </ul>
 
         <NavLink to="/auth">
-          <button className="button">Log in</button>
+          <button className="button" onClick={()=>show()}>Log in</button>
         </NavLink>
       </nav>
     </header>
