@@ -47,7 +47,7 @@ function App() {
         });
       return;
     }
-  }, [dispatch,loginStatus]);
+  }, [dispatch]);
   return (
     <div className="App">
         <Header />

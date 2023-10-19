@@ -10,6 +10,8 @@ import { mailAction } from "../../store/MailSlice";
 import {
   Badge,
   Button,
+  Card,
+  CardBody,
   ListGroup,
   ListGroupItem,
   Toast,
@@ -126,26 +128,30 @@ const Home = () => {
         console.log(error);
       });
     setReadMode(false);
-    setTemp([]);
+    console.log(value);
     // dispatch(mailAction.removeMail(value));
+    // setTemp([]);
   };
   return (
-    <div>
-      <div className="container-fluid mail-main">
-        <div className="row">
-          <section className="menu-disp menu col-lg-2 col-md-12 p-3 rad">
+    <section>
+      <div className="container-fluid mail-main" style={{ height: "480px" }}>
+        <div className="row" style={{ height: "90%" }}>
+          <Card
+            className="menu-disp menu col-lg-2 col-md-12 p-3 rad"
+            style={{ height: "60%" }}
+          >
             <button
               className="compose font-weight text-light"
               onClick={() => {
                 composehandle(true);
               }}
             >
-              <BiPencil /> Compose mail
+              <BiPencil size="1.5rem" /> Compose mail
             </button>
             <div class="inbox-list">
-              <ul className="menu-list font-weight mt-1">
-                <li
-                  className={activeListItem === "Inbox" ? "list-active" : ""}
+              <ListGroup className="menu-list font-weight mt-4">
+                <ListGroupItem
+                  className={activeListItem === "Inbox" ? "active" : ""}
                   onClick={() => handleItemClick("Inbox")}
                 >
                   Inbox{" "}
@@ -160,9 +166,9 @@ const Home = () => {
                     </Badge>
                   )}
                   {/* {unread.length>0 && <span className="inbox-unread-count">{unread.length} unread mails</span>} */}
-                </li>
-                <li
-                  className={activeListItem === "Sent" ? "list-active" : ""}
+                </ListGroupItem>
+                <ListGroupItem
+                  className={activeListItem === "Sent" ? "active" : ""}
                   onClick={() => handleItemClick("Sent")}
                 >
                   Sent{" "}
@@ -170,14 +176,14 @@ const Home = () => {
                     {sentMails.length}
                   </Badge>
                   {/* <span className="sent-mail-count">{sentMails.length}</span> */}
-                </li>
-              </ul>
+                </ListGroupItem>
+              </ListGroup>
             </div>
-          </section>
+          </Card>
           {!readmoode && (
-            <section className="bg-light list col-lg-9 py-3 px-4 mx-5 col-md-12 rad">
+            <Card className="bg-light list col-lg-9 py-3 px-4 mx-4 col-md-12 rad">
               {/* Mail Listes   the main mail */}
-              <div className="mail-lists">
+              <CardBody className="mail-lists">
                 {temp.length === 0 ? (
                   <div className="d-flex justify-content-center align-items-center flex-column">
                     <h3> No {activeListItem} mail available</h3>
@@ -198,7 +204,11 @@ const Home = () => {
                             <GoDotFill color="green" />
                           </span>
                         )}
-                        <span>{value.name}</span>
+                        {activeListItem === "Sent" ? (
+                          <span>{value.reciver}</span>
+                        ) : (
+                          <span>{value.name}</span>
+                        )}
                         <span className="title-mail-list">{value.subject}</span>
                         <span className="description-mail-list">
                           {value.mail}
@@ -210,11 +220,11 @@ const Home = () => {
                     ))}
                   </ListGroup>
                 )}
-              </div>
-            </section>
+              </CardBody>
+            </Card>
           )}
           {readmoode && (
-            <section className="bg-light list col-lg-8 col-md-11 mx-5 py-3 px-3">
+            <Card className="bg-light list col-lg-9 col-md-11 mx-4 py-3 px-3">
               <div>
                 <div className="mail-readmode-header">
                   <Button
@@ -250,15 +260,23 @@ const Home = () => {
                 <div className="mail-list-header p-3 font-weight d-flex flex-row justify-content-start">
                   <span className="w-100">
                     <div className="d-flex align-items-center justify-content-between">
-                      <span className="ms-2">{readmoodeValue.name}</span>
+                      {activeListItem === "Sent" ? (
+                        <span>me to</span>
+                      ) : (
+                        <span className="ms-2">{readmoodeValue.name}</span>
+                      )}
                       <span> {readmoodeValue.time} </span>
                     </div>
-                    <span className=" ms-2">to me</span>
+                    {activeListItem === "Sent" ? (
+                      <span>{readmoodeValue.reciver}</span>
+                    ) : (
+                      <span className=" ms-2">to me</span>
+                    )}
                   </span>
                 </div>
                 <div className="message-container">{readmoodeValue.mail}</div>
               </div>
-            </section>
+            </Card>
           )}
         </div>
       </div>
@@ -269,7 +287,7 @@ const Home = () => {
           time={formattedDate + " " + formattedTime}
         />
       )}
-    </div>
+    </section>
   );
 };
 
