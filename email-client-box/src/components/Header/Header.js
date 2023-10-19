@@ -5,11 +5,18 @@ import { useSelector, useDispatch } from "react-redux";
 import "./Header.css";
 import { authActions } from "../../store/AuthSlice";
 import { AiOutlineUser } from "react-icons/ai";
+import { mailAction } from "../../store/MailSlice";
 
 const Header = ({ show }) => {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
   const email = useSelector((state) => state.auth.email);
+
+  const deleteHandler = () => {
+    dispatch(mailAction.replaceMails());
+    dispatch(authActions.logout());
+  };
+
   return (
     <header className="header">
       <nav className="nav">
@@ -24,10 +31,7 @@ const Header = ({ show }) => {
         )}
         <NavLink to="/auth">
           {loginStatus ? (
-            <button
-              className="button"
-              onClick={() => dispatch(authActions.logout())}
-            >
+            <button className="button" onClick={deleteHandler}>
               Log out
             </button>
           ) : (

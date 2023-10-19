@@ -16,6 +16,7 @@ import {
   ListGroup,
   ListGroupItem,
 } from "react-bootstrap";
+import useFetchDel from "../../Hooks/useFetchDelete";
 
 const Home = () => {
   const [activeListItem, setActiveListItem] = useState("Inbox");
@@ -119,17 +120,21 @@ const Home = () => {
         if (!response) {
           throw new Error("Network error");
         } else {
+          if (activeListItem === "Inbox") {
+            dispatch(mailAction.allMail(value));
+          } else {
+            dispatch(mailAction.sentMail(value));
+          }
           console.log("Deleted successfully");
         }
       })
       .catch((error) => {
         console.log(error);
       });
-    if (activeListItem === "Inbox") {
-      dispatch(mailAction.allMail(value));
-    } else {
-      dispatch(mailAction.sentMail(value));
-    }
+    // useFetchDel(
+    //   `https://react-http-91704-default-rtdb.firebaseio.com/mailClient/${value.mailId}.json`
+    // );
+
     setReadMode(false);
   };
   return (
@@ -148,7 +153,7 @@ const Home = () => {
             >
               <BiPencil size="1.5rem" /> Compose mail
             </button>
-            <div class="inbox-list">
+            <div className="inbox-list">
               <ListGroup className="menu-list font-weight mt-4">
                 <ListGroupItem
                   style={{ cursor: "pointer" }}
@@ -185,7 +190,7 @@ const Home = () => {
           {!readmoode && (
             <Card
               className="bg-light list col-lg-9 py-3 px-4 mx-4 col-md-12 rad"
-              style={{ height:"99%", overflow :"auto"}}
+              style={{ height: "99%", overflow: "auto" }}
             >
               {/* Mail Listes   the main mail */}
               <CardBody className="mail-lists">

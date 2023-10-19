@@ -8,7 +8,7 @@ const mailSlice = createSlice({
     sentMails: [],
   },
   reducers: {
-    emptyMails(state) {
+    replaceMails(state) {
       state.allMails = [];
       state.sentMails = [];
       state.unreadMails = [];
