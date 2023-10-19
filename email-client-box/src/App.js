@@ -7,15 +7,19 @@ import Authentication from "./components/Authentication/Authentication";
 import Header from "./components/Header/Header";
 import Home from "./components/Home/Home";
 import { mailAction } from "../src/store/MailSlice";
-
+// let isInitialRef = true;
 
 function App() {
   const loginStatus = useSelector((state) => state.auth.loginStatus);
+  const allMails = useSelector((state) => state.mail.allMails);
+  const sentMails = useSelector((state) => state.mail.sentMails);
   const isInitialRef = useRef(true);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (isInitialRef.current) {
-      isInitialRef.current = false;
+      if (isInitialRef.current) {
+        isInitialRef.current = false;
+    // setInterval(() => {
+      // dispatch(mailAction.emptyMails());
       fetch(
         "https://react-http-91704-default-rtdb.firebaseio.com/mailClient.json"
       )
@@ -36,26 +40,51 @@ function App() {
                 temp.sender === localStorage.getItem("email") ||
                 temp.reciver === localStorage.getItem("email")
               ) {
-                dispatch(mailAction.addMail(temp));
+                // if (isInitialRef) {
+                //   isInitialRef = false;
+                //   dispatch(mailAction.addMail(temp));
+                // // } else {
+                //   const existMail = allMails.some(
+                //     (mail) => mail.mailId === temp.mailId
+                //   );
+                //   console.log(existMail)
+                  // allMails.forEach((mail) => {
+                  //   if (mail.mailId !== temp.mailId) {
+                  //     dispatch(mailAction.addMail(temp));
+                  //     console.log("checking part all");
+                  //   }
+                  // });
+                  // sentMails.map((mail) => {
+                  //   if (mail.mailId !== temp.mailId) {
+                      dispatch(mailAction.addMail(temp));
+                  //     console.log("checking part sent");
+                  //   }
+                  // });
+                // }
               }
             });
           }
         })
         .catch((error) => {
-          alert(error.message)
+          alert(error.message);
           console.log(error);
         });
-      return;
-    }
+    // }, 2000);
+
+        return;
+      }
   }, [dispatch]);
+
   return (
     <div className="App">
-        <Header />
+      <Header />
       <section className="home">
         <Switch>
-          {loginStatus && <Route exact path="/home">
-            <Home/>
-          </Route>}
+          {loginStatus && (
+            <Route exact path="/home">
+              <Home />
+            </Route>
+          )}
           {!loginStatus && (
             <Route exact path="/auth">
               <Authentication />

@@ -134,11 +134,11 @@ const Home = () => {
   };
   return (
     <section>
-      <div className="container-fluid mail-main" style={{ height: "480px" }}>
+      <div className="container-fluid mail-main" style={{ height: "500px" }}>
         <div className="row" style={{ height: "90%" }}>
           <Card
             className="menu-disp menu col-lg-2 col-md-12 p-3 rad"
-            style={{ height: "60%" }}
+            style={{ height: "50%" }}
           >
             <button
               className="compose font-weight text-light"
@@ -183,7 +183,10 @@ const Home = () => {
             </div>
           </Card>
           {!readmoode && (
-            <Card className="bg-light list col-lg-9 py-3 px-4 mx-4 col-md-12 rad">
+            <Card
+              className="bg-light list col-lg-9 py-3 px-4 mx-4 col-md-12 rad"
+              style={{ height:"99%", overflow :"auto"}}
+            >
               {/* Mail Listes   the main mail */}
               <CardBody className="mail-lists">
                 {temp.length === 0 ? (
@@ -199,6 +202,7 @@ const Home = () => {
                         onClick={() => {
                           readModeActivehandler(value);
                         }}
+                        key={value.mailId}
                       >
                         <span>{i + 1}</span>
                         {activeListItem === "Inbox" ? (
