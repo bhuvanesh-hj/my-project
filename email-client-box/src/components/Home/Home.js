@@ -7,11 +7,20 @@ import { GoDotFill } from "react-icons/go";
 import ComposeMail from "../ComposeMail/ComposeMail";
 import { useDispatch, useSelector } from "react-redux";
 import { mailAction } from "../../store/MailSlice";
+import {
+  Badge,
+  Button,
+  ListGroup,
+  ListGroupItem,
+  Toast,
+  ToastBody,
+} from "react-bootstrap";
 
 const Home = () => {
   const [activeListItem, setActiveListItem] = useState("Inbox");
   const [iscompose, setCompose] = useState(false);
   const [readmoode, setReadMode] = useState(false);
+  const [toast, setToast] = useState(false);
   const [readmoodeValue, setReadModeValue] = useState("");
   const currentDate = new Date();
   const sentMails = useSelector((state) => state.mail.sentMails);
@@ -140,15 +149,27 @@ const Home = () => {
                   onClick={() => handleItemClick("Inbox")}
                 >
                   Inbox{" "}
-                  <span className="inbox-mail-count">{allMails.length}</span>
-                  <span className="inbox-unread-count">{unread.length}</span>
+                  <Badge pill bg="warning">
+                    {allMails.length}
+                  </Badge>
+                  <br />
+                  {/* <span className="inbox-mail-count">{allMails.length}</span> */}
+                  {unread.length > 0 && (
+                    <Badge pill bg="success">
+                      {unread.length} unread mails
+                    </Badge>
+                  )}
+                  {/* {unread.length>0 && <span className="inbox-unread-count">{unread.length} unread mails</span>} */}
                 </li>
                 <li
                   className={activeListItem === "Sent" ? "list-active" : ""}
                   onClick={() => handleItemClick("Sent")}
                 >
                   Sent{" "}
-                  <span className="sent-mail-count">{sentMails.length}</span>
+                  <Badge pill bg="warning">
+                    {sentMails.length}
+                  </Badge>
+                  {/* <span className="sent-mail-count">{sentMails.length}</span> */}
                 </li>
               </ul>
             </div>
@@ -162,9 +183,10 @@ const Home = () => {
                     <h3> No {activeListItem} mail available</h3>
                   </div>
                 ) : (
-                  <ul>
+                  <ListGroup>
                     {temp.map((value, i) => (
-                      <li
+                      <ListGroupItem
+                        action
                         className="font-weight d-flex align-items-center justify-content-between font-reducer"
                         onClick={() => {
                           readModeActivehandler(value);
@@ -184,28 +206,36 @@ const Home = () => {
                         <span className="mail-time">
                           <span>{value.time}</span>
                         </span>
-                      </li>
+                      </ListGroupItem>
                     ))}
-                  </ul>
+                  </ListGroup>
                 )}
               </div>
             </section>
           )}
           {readmoode && (
-            <section className="bg-light list col-lg-9 col-md-12 mx-5 py-3 px-3">
+            <section className="bg-light list col-lg-8 col-md-11 mx-5 py-3 px-3">
               <div>
                 <div className="mail-readmode-header">
-                  <span onClick={readmodeHandler} title="Back">
+                  <Button
+                    variant="info"
+                    size="sm"
+                    onClick={readmodeHandler}
+                    title="Back"
+                  >
                     <FcUpLeft size="1.3rem" />
-                  </span>
-                  <span
+                  </Button>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="mx-3"
                     onClick={() => {
                       deleteHandler(readmoodeValue);
                     }}
                     title="Delete"
                   >
                     <AiFillDelete size="1.3rem" />
-                  </span>
+                  </Button>
                 </div>
               </div>
               {/* Mail Listes   the main mail */}

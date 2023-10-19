@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -47,7 +47,7 @@ function App() {
         });
       return;
     }
-  }, [dispatch]);
+  }, [dispatch,loginStatus]);
   return (
     <div className="App">
         <Header />
