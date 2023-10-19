@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 import { FcUpLeft } from "react-icons/fc";
 import { BiPencil } from "react-icons/bi";
+import { TiArrowBack, TiArrowForward } from "react-icons/ti";
 import { AiFillDelete } from "react-icons/ai";
 import { GoDotFill } from "react-icons/go";
 import ComposeMail from "../ComposeMail/ComposeMail";
@@ -14,15 +15,12 @@ import {
   CardBody,
   ListGroup,
   ListGroupItem,
-  Toast,
-  ToastBody,
 } from "react-bootstrap";
 
 const Home = () => {
   const [activeListItem, setActiveListItem] = useState("Inbox");
   const [iscompose, setCompose] = useState(false);
   const [readmoode, setReadMode] = useState(false);
-  const [toast, setToast] = useState(false);
   const [readmoodeValue, setReadModeValue] = useState("");
   const currentDate = new Date();
   const sentMails = useSelector((state) => state.mail.sentMails);
@@ -127,10 +125,12 @@ const Home = () => {
       .catch((error) => {
         console.log(error);
       });
+    if (activeListItem === "Inbox") {
+      dispatch(mailAction.allMail(value));
+    } else {
+      dispatch(mailAction.sentMail(value));
+    }
     setReadMode(false);
-    console.log(value);
-    // dispatch(mailAction.removeMail(value));
-    // setTemp([]);
   };
   return (
     <section>
@@ -151,6 +151,7 @@ const Home = () => {
             <div class="inbox-list">
               <ListGroup className="menu-list font-weight mt-4">
                 <ListGroupItem
+                  style={{ cursor: "pointer" }}
                   className={activeListItem === "Inbox" ? "active" : ""}
                   onClick={() => handleItemClick("Inbox")}
                 >
@@ -168,6 +169,7 @@ const Home = () => {
                   {/* {unread.length>0 && <span className="inbox-unread-count">{unread.length} unread mails</span>} */}
                 </ListGroupItem>
                 <ListGroupItem
+                  style={{ cursor: "pointer" }}
                   className={activeListItem === "Sent" ? "active" : ""}
                   onClick={() => handleItemClick("Sent")}
                 >
@@ -199,6 +201,11 @@ const Home = () => {
                         }}
                       >
                         <span>{i + 1}</span>
+                        {activeListItem === "Inbox" ? (
+                          <TiArrowForward />
+                        ) : (
+                          <TiArrowBack />
+                        )}
                         {!value.read && (
                           <span className="bullet">
                             <GoDotFill color="green" />

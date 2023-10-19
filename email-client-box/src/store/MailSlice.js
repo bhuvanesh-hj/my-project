@@ -18,9 +18,14 @@ const mailSlice = createSlice({
         state.allMails.push({ ...action.payload });
       }
     },
-    removeMail(state, action) {
+    sentMail(state, action) {
       state.sentMails = state.sentMails.filter((value) => {
-        return value.sentid !== action.payload.sentid;
+        return value.mailId !== action.payload.mailId;
+      });
+    },
+    allMail(state, action) {
+      state.allMails = state.allMails.filter((value) => {
+        return value.mailId !== action.payload.mailId;
       });
     },
   },
