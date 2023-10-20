@@ -10,7 +10,6 @@ function developer() {
     { id: 2, name: "Vaibhav", role: "Backend Developer" },
     { id: 3, name: "Suresh", role: "Frontend Developer" },
   ];
-
   return (
     <Fragment>
       {devId == 1 && (
@@ -28,7 +27,7 @@ function developer() {
           {details[2].name} {details[2].role}
         </h1>
       )}
-      {devId >3 && <h1>Developer doesn't exist</h1>}
+      {devId > 3 && <h1>Developer doesn't exist</h1>}
     </Fragment>
   );
 }
