@@ -1,5 +1,5 @@
 import { Switch, Route } from "react-router-dom";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import "./App.css";
@@ -10,15 +10,15 @@ import { mailAction } from "../src/store/MailSlice";
 import { useFetch } from "./Hooks/useFetch";
 
 function App() {
+  const [update, setUpdate] = useState(true);
   const loginStatus = useSelector((state) => state.auth.loginStatus);
   // const isInitialRef = useRef(true);
   const dispatch = useDispatch();
-
   const [data] = useFetch(
-    "https://react-http-91704-default-rtdb.firebaseio.com/mailClient.json"
+    "https://react-http-91704-default-rtdb.firebaseio.com/mailClient.json",
   );
-
   if (data) {
+    dispatch(mailAction.replaceMails())
     Object.keys(data).forEach((mailId) => {
       let temp = {
         mailId,
@@ -28,11 +28,16 @@ function App() {
         temp.sender === localStorage.getItem("email") ||
         temp.reciver === localStorage.getItem("email")
       ) {
-        dispatch(mailAction.addMail(temp));
+        dispatch(mailAction.addMail(temp))
       }
       // console.log(temp);
     });
   }
+
+  const updateHnadler = () => {
+    window.location.reload(false)
+    // setUpdate(prev=>!prev)
+  };
 
   // useEffect(() => {
   //     if (isInitialRef.current) {
@@ -75,7 +80,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+       <Header click={updateHnadler} />
       <section className="home">
         <Switch>
           {loginStatus && (

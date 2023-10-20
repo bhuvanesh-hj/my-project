@@ -7,7 +7,7 @@ export const useFetch = (url) => {
     fetch(url)
       .then((response) => {
         if (response.ok) {
-          response.json();
+          return response.json();
         } else {
           throw new Error("Failed to get fetch data from api!!");
         }

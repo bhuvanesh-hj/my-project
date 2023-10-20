@@ -7,14 +7,16 @@ import { authActions } from "../../store/AuthSlice";
 import { AiOutlineUser } from "react-icons/ai";
 import { mailAction } from "../../store/MailSlice";
 
-const Header = ({ show }) => {
+const Header = (props) => {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
-  const email = useSelector((state) => state.auth.email);
+  const email = localStorage.getItem("email")
+  // const email = useSelector((state) => state.auth.email);
 
   const deleteHandler = () => {
-    dispatch(mailAction.replaceMails());
     dispatch(authActions.logout());
+    props.click()
+    // dispatch(mailAction.replaceMails());
   };
 
   return (
