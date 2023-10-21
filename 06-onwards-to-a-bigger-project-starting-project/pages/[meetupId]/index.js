@@ -1,54 +1,62 @@
+import { MongoClient, ObjectId} from "mongodb";
+
 import MeetupDetail from "../../components/meetups/MeetupDetail";
 
-const meetupId = () => {
+const meetupId = (props) => {
   return (
     <MeetupDetail
-      image="https://images.pexels.com/photos/45853/grey-crowned-crane-bird-crane-animal-45853.jpeg?auto=compress&cs=tinysrgb&w=600"
-      id="m1"
-      title="A first meetup"
-      description="This ia a first meetup"
-      address="Some road 23, Some city"
+      image={props.meetupData.image}
+      id={props.meetupData.id}
+      title={props.meetupData.title}
+      description={props.meetupData.description}
+      address={props.meetupData.address}
     />
   );
 };
 
 export async function getStaticPaths() {
+  const client = await MongoClient.connect(
+    "mongodb+srv://bhuvaneshhj:GMVOZTmT471wS0kR@cluster0.fghogsf.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+
+  const meetupsCollection = db.collection("meetups");
+
+  const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+
+  client.close();
   return {
     fallback: false,
-    paths: [
-      {
-        params: {
-          meetupId: "m1",
-        },
+    paths: meetups.map((meetup) => ({
+      params: {
+        meetupId: meetup._id.toString(),
       },
-      {
-        params: {
-          meetupId: "m2",
-        },
-      },
-      {
-        params: {
-          meetupId: "m3",
-        },
-      },
-    ],
+    })),
   };
 }
 
 export async function getStaticProps(context) {
   const meetupId = context.params.meetupId;
 
-  console.log(meetupId);
+  const client = await MongoClient.connect(
+    "mongodb+srv://bhuvaneshhj:GMVOZTmT471wS0kR@cluster0.fghogsf.mongodb.net/meetups?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+
+  const meetupsCollection = db.collection("meetups");
+
+  const meetups = await meetupsCollection.findOne({ _id: new ObjectId(meetupId) });
+
+  client.close();
 
   return {
     props: {
       meetupData: {
-        image:
-          "https://images.pexels.com/photos/45853/grey-crowned-crane-bird-crane-animal-45853.jpeg?auto=compress&cs=tinysrgb&w=600",
-        id: meetupId,
-        title: "A first meetup",
-        description: "This ia a first meetup",
-        address: "Some road 23, Some city",
+        image: meetups.image,
+        id: meetups._id.toString(),
+        title: meetups.title,
+        description: meetups.description,
+        address: meetups.address,
       },
     },
   };
