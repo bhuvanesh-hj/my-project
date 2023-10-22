@@ -2,6 +2,7 @@ import React from "react";
 import Todo from "../model/todo";
 import dbConnect from "../utils/dbConnect";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 const page = async () => {
   dbConnect();
@@ -18,8 +19,29 @@ const page = async () => {
     } catch (error) {
       console.error(error);
     }
-    redirect("/todos")
+    redirect("/todos");
   }
+
+  const deleteTodo = async (data) => {
+    "use server";
+    let id = JSON.parse(data.get("id")?.valueOf());
+    await Todo.deleteOne({ _id: id });
+    redirect("/todos");
+  };
+
+  const completedTodo = async (data) => {
+    "use server";
+    dbConnect();
+    let id = JSON.parse(data.get("id")?.valueOf());
+    // let oldTodo = await Todo.findOne({ _id: id });
+    // let todo = { completed: true, _id: oldTodo._id, todo: oldTodo.todo };
+    let completedTodo = await Todo.findByIdAndUpdate(
+      { _id: id },
+      { completed: true }
+    );
+    console.log(completedTodo);
+    redirect("/completed_tasks");
+  };
 
   return (
     <div>
@@ -44,38 +66,65 @@ const page = async () => {
         <div className="m-auto">
           <div>
             <ul className="flex space-x-28 border p-4 bg-slate-300 rounded-md">
-              <li className="flex-1">#</li>
               <li className="flex-1"></li>
               <li className="flex-1">Title</li>
               <li className="flex-1">Actions</li>
             </ul>
             {/* <br /> */}
             <div className="max-h-72 overflow-auto">
-            {todos.map((element, i) => {
-              return (
-                <>
-                  <ul key={element.id} className="flex space-x-28 border p-4 bg-gray-600 rounded-md">
-                    <li className="flex-1 text-white">{i + 1}</li>
-                    <li className="flex-1">
-                      <button className="bg-green-500 px-1 rounded-md text-white hover:border-2 hover:border-black">
-                        Completed
-                      </button>
-                    </li>
-                    <li className="flex-1 text-white">{element.todo}</li>
-                    <li className="flex-1">
-                      <div className="flex">
-                        <button className="bg-blue-600 border-white rounded-md text-white px-2 hover:border-2 hover:border-black mx-2">
-                          Edit
-                        </button>
-                        <button className="bg-red-600 border-white rounded-md text-white px-2 hover:border-2 hover:border-black mx-2">
-                          Delete
-                        </button>
-                      </div>
-                    </li>
-                  </ul>
-                </>
-              );
-            })}
+              {todos.map((element) => {
+                if (element.completed === false) {
+                  return (
+                    <>
+                      <ul
+                        key={element._id}
+                        className="flex space-x-28 border p-4 bg-gray-600 rounded-md"
+                      >
+                        <li className="flex-1">
+                          <form action={completedTodo}>
+                            <input
+                              type="hidden"
+                              name="id"
+                              id="id"
+                              value={JSON.stringify(element._id)}
+                            />
+                            <button
+                              className="bg-green-500 px-1 rounded-md text-white hover:border-2 hover:border-black"
+                              type="submit"
+                            >
+                              Completed
+                            </button>
+                          </form>
+                        </li>
+                        <li className="flex-1 text-white">{element.todo}</li>
+                        <li className="flex-1">
+                          <div className="flex">
+                            <Link href={"/edit/" + element._id}>
+                              <button className="bg-blue-600 border-white rounded-md text-white px-2 hover:border-2 hover:border-black mx-2">
+                                Edit
+                              </button>
+                            </Link>
+                            <form action={deleteTodo}>
+                              <input
+                                type="hidden"
+                                name="id"
+                                id="id"
+                                value={JSON.stringify(element._id)}
+                              />
+                              <button
+                                className="bg-red-600 border-white rounded-md text-white px-2 hover:border-2 hover:border-black mx-2"
+                                type="submit"
+                              >
+                                Delete
+                              </button>
+                            </form>
+                          </div>
+                        </li>
+                      </ul>
+                    </>
+                  );
+                }
+              })}
             </div>
           </div>
         </div>
@@ -83,7 +132,5 @@ const page = async () => {
     </div>
   );
 };
-
-
 
 export default page;

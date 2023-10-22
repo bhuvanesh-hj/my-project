@@ -14,7 +14,7 @@ const Header = () => {
           <Link href="/todos" className="hover:font-extrabold hover:text-base">
             Todos
           </Link>
-          <Link href="#" className="hover:font-extrabold hover:text-base">
+          <Link href="/completed_tasks" className="hover:font-extrabold hover:text-base">
             Completed_Tasks
           </Link>
         </div>

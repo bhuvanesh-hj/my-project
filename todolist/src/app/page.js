@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -10,10 +10,10 @@ export default function Home() {
             <Link href="/todos"> Add Todos</Link>
           </button>
           <button className="p-3 bg-transparent border-2 mx-9 rounded-md border-black bg-slate-500 hover:border-lime-400 ">
-            Completed Tasks
+            <Link href="/completed_tasks"> Completed Tasks</Link>
           </button>
         </div>
       </div>
     </div>
-  )
+  );
 }
